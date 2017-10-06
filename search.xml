@@ -54,6 +54,8 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
 <p><strong>注意</strong>：select后的1表示我们查询的是这个字段的第一个值，若我们想查询其他字段中的值，直接更换这里的’users’即可，所以这里的limit 0,1起不到限定作用，可有可无。</p>
 <p>2.使用<code>ord()</code>与<code>mid()</code>函数</p>
 <p>解释：这里的mid()函数与substr()函数类似，有一样的功能。函数原型为：<code>MID(ColumnName, Start [, Length])</code>对字符串从start位置开始截取相应的长度。这里我就可以在substr()被禁的情况下做替换。</p>
+<hr>
+<p>未完待续………………..</p>
 ]]></content>
       
         
