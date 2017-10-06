@@ -40,7 +40,7 @@ D0g3第三次测试的题目，整个题目拥有7个flag。目标主机是一�
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/sql.png">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/flag5-3.png">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/system.png">
-<meta property="og:updated_time" content="2017-08-23T04:07:20.880Z">
+<meta property="og:updated_time" content="2017-10-06T05:24:46.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Blackb0x 服务器渗透">
 <meta name="twitter:description" content="一次虚拟机服务器的内网渗透
@@ -352,7 +352,7 @@ D0g3第三次测试的题目，整个题目拥有7个flag。目标主机是一�
 </ul>
 <p>使用<em>zenmap</em>（nmap的图形化版本）进行端口扫描，扫描参数使用默认的就可以了。扫描结果如下：</p>
 <p><img src="http://ourd90bac.bkt.clouddn.com/flag1-1.png" alt=""></p>
-<p>从扫描结果可以发现开放了： 21/tcp、23/tcp端口，这两个服务分别对应着<a href="https://baike.baidu.com/item/ftp/13839?fr=aladdin" target="_blank" rel="external">文件传输协议</a>与<a href="https://baike.baidu.com/item/http/243074?fromtitle=%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE&amp;fromid=8535513" target="_blank" rel="external">web</a>服务，即服务器设有网站，并且还发现了一个<em>phpinfo()</em>页面。打开后获得第一条<em>flag</em>。</p>
+<p>从扫描结果可以发现开放了： 21/tcp、80/tcp端口，这两个服务分别对应着<a href="https://baike.baidu.com/item/ftp/13839?fr=aladdin" target="_blank" rel="external">文件传输协议</a>与<a href="https://baike.baidu.com/item/http/243074?fromtitle=%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE&amp;fromid=8535513" target="_blank" rel="external">web</a>服务，即服务器设有网站，并且还发现了一个<em>phpinfo()</em>页面。打开后获得第一条<em>flag</em>。</p>
 <p><img src="http://ourd90bac.bkt.clouddn.com/flag1-2.png" alt=""></p>
 <p>于是现在就提供了两条思路。1.通过ftp协议进行远程访问，获取服务器的有用信息；2.通过找到服务器搭载的网站进行渗透，getshell后进行提权拿到服务器。</p>
 <ul>
@@ -409,7 +409,7 @@ D0g3第三次测试的题目，整个题目拥有7个flag。目标主机是一�
         <p><span>本文标题:</span><a href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
         <p><span>发布时间:</span>2017-08-16, 16:15:40</p>
-        <p><span>最后更新:</span>2017-08-23, 12:07:20</p>
+        <p><span>最后更新:</span>2017-10-06, 13:24:46</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/08/16/Blackb0x-服务器渗透/" title="Blackb0x 服务器渗透">http://yoursite.com/2017/08/16/Blackb0x-服务器渗透/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/08/16/Blackb0x-服务器渗透/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>

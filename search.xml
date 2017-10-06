@@ -89,7 +89,7 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
 </ul>
 <p>使用<em>zenmap</em>（nmap的图形化版本）进行端口扫描，扫描参数使用默认的就可以了。扫描结果如下：</p>
 <p><img src="http://ourd90bac.bkt.clouddn.com/flag1-1.png" alt=""></p>
-<p>从扫描结果可以发现开放了： 21/tcp、23/tcp端口，这两个服务分别对应着<a href="https://baike.baidu.com/item/ftp/13839?fr=aladdin" target="_blank" rel="external">文件传输协议</a>与<a href="https://baike.baidu.com/item/http/243074?fromtitle=%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE&amp;fromid=8535513" target="_blank" rel="external">web</a>服务，即服务器设有网站，并且还发现了一个<em>phpinfo()</em>页面。打开后获得第一条<em>flag</em>。</p>
+<p>从扫描结果可以发现开放了： 21/tcp、80/tcp端口，这两个服务分别对应着<a href="https://baike.baidu.com/item/ftp/13839?fr=aladdin" target="_blank" rel="external">文件传输协议</a>与<a href="https://baike.baidu.com/item/http/243074?fromtitle=%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE&amp;fromid=8535513" target="_blank" rel="external">web</a>服务，即服务器设有网站，并且还发现了一个<em>phpinfo()</em>页面。打开后获得第一条<em>flag</em>。</p>
 <p><img src="http://ourd90bac.bkt.clouddn.com/flag1-2.png" alt=""></p>
 <p>于是现在就提供了两条思路。1.通过ftp协议进行远程访问，获取服务器的有用信息；2.通过找到服务器搭载的网站进行渗透，getshell后进行提权拿到服务器。</p>
 <ul>
