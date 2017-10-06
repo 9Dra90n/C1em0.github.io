@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[Blackb0x 服务器渗透]]></title>
+      <url>/2017/08/16/Blackb0x-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F/</url>
+      <content type="html"><![CDATA[<h1 id="一次虚拟机服务器的内网渗透"><a href="#一次虚拟机服务器的内网渗透" class="headerlink" title="一次虚拟机服务器的内网渗透"></a>一次虚拟机服务器的内网渗透</h1><p><img src="http://ourd90bac.bkt.clouddn.com/timg.jpg" alt=""></p>
+<blockquote>
+<p>D0g3第三次测试的题目，整个题目拥有7个<em>flag</em>。目标主机是一个Windows2003虚拟机，登录密码非弱口令，无法通过字典爆破的形式进行简单的进入，需进行常规的内网渗透程序进行渗透。</p>
+</blockquote>
+<hr>
+<a id="more"></a>
+<h2 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h2><ul>
+<li><strong>获取目标IP</strong><blockquote>
+<p>建议VM虚拟机使用桥接的方式，<em>kali</em>虚拟机也是用桥接模式，这样在一个网段才能扫到IP，实验也更贴近实战。</p>
+</blockquote>
+</li>
+</ul>
+<p>使用<strong>kali Linux</strong>。终端 <em>netdiscover</em>命令获取同网段的主机IP(192.168.2.116)</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/Kali.png" alt=""></p>
+<ul>
+<li><strong>端口扫描</strong></li>
+</ul>
+<p>使用<em>zenmap</em>（nmap的图形化版本）进行端口扫描，扫描参数使用默认的就可以了。扫描结果如下：</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/flag1-1.png" alt=""></p>
+<p>从扫描结果可以发现开放了： 21/tcp、23/tcp端口，这两个服务分别对应着<a href="https://baike.baidu.com/item/ftp/13839?fr=aladdin" target="_blank" rel="external">文件传输协议</a>与<a href="https://baike.baidu.com/item/http/243074?fromtitle=%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE&amp;fromid=8535513" target="_blank" rel="external">web</a>服务，即服务器设有网站，并且还发现了一个<em>phpinfo()</em>页面。打开后获得第一条<em>flag</em>。</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/flag1-2.png" alt=""></p>
+<p>于是现在就提供了两条思路。1.通过ftp协议进行远程访问，获取服务器的有用信息；2.通过找到服务器搭载的网站进行渗透，getshell后进行提权拿到服务器。</p>
+<ul>
+<li><strong>目录扫描</strong></li>
+</ul>
+<p>既然开了80端口，就不得不扫一波目录了。</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/flag2-1.png" alt=""></p>
+<p>果然发现有收获：点进<em>192.168.2.116/ftp.rar</em>得到有个ftp程序的压缩包。解压：</p>
+<p>即获得第二个flag<br><img src="http://ourd90bac.bkt.clouddn.com/f2.png" alt=""></p>
+<p>然后打开第二个文件夹中的ftp软件，在用户设置页面获得第三个flag。</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/flag3.png" alt=""></p>
+<h2 id="FTP利用"><a href="#FTP利用" class="headerlink" title="FTP利用"></a>FTP利用</h2><p>前三个flag拿得还是很轻松，基本的信息搜集就可以做到了，心里美滋滋。可是下一步怎么走就比较懵逼了。于是进一步进行搜集（瞎找）。</p>
+<p>最后在压缩包的第二个.xml文件中找到了蛛丝马迹。因为这个xml文件是记录着ftp远程连接的用户名和密码，以前在服务器上大马利用ftp提权的时候会专门去找这个文件，这里发现这个文件应该是故意给出下一步渗透的提示，看来思路是正确的。</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/ftp.png" alt=""></p>
+<p>找到对应的用户名：<em>admin</em>，解出对应的md5的密码。应该就可以进行远程登陆了。</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/ftp2.png" alt=""></p>
+<p>登录之后获得一个hosts.bak的文件。这一步本想是偷懒上传一个五次shift的cmd后门，但是发现ftp链接后的权限被限制为只能读取了，所以感觉比较可惜啊。没办法，只有老老实实把hosts文件复制到本地再研究下了。</p>
+<blockquote>
+<p>关于hosts文件：hosts文件是电脑中用于对域名进行解析的文件。它的优先级要大于DNS服务器。也就是说，电脑在访问网站时会先根据hosts文件中的域名解析信息寻找目标网址IP，如果没找到才会发给DNS服务器进行解析。</p>
+</blockquote>
+<p>hosts文件内容如下：</p>
+<pre><code>`127.0.0.1 admin.hack.me
+
+ 127.0.0.1 cms.hack.me`
+</code></pre><p>现在分析下：”127.0.0.1”是服务器的本地地址，也就是服务器内访问admin.hack.me 和cms.hack.me时会被解析到本地(localhost)，也就是说本地一定存在对应这两个网站的网站。（但我扫目录的时候咋没扫出来，至少扫出一个才正常啊…….）</p>
+<p>于是将hosts文件内容替换到本地，将 127.0.0.1 替换成目标的IP地址。分别访问，出现以下两个页面：</p>
+<p>一个是<em>phpmyadmin</em>管理登录页面;<br>另一个是<em>joomla cms</em>网站的页面;</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/admin.png" alt=""></p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/cms.png" alt=""></p>
+<p>cms网站看了很久，没有找到版本号，exp那条路基本上比较难，而慢慢测试漏洞去突破显然不如搞phpmyadmin来得好点。所以就暂时放了一放cms。</p>
+<p>phpmyadmin这里找了很久没有再发现有什么好的提示，试了下默认密码和匿名登录都不行，那就只有硬着头皮进行弱口令爆破了。于是下载了个phpmyadmin爆破工具，加载字典跑，在经历了近十次的误报后终于爆出了密码，登录进去。发现了第四个<em>flag</em></p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/flag3-3.png" alt=""></p>
+<p>既然都拿到了root权限的数据库，那就可以找到刚才cms网站的后台密码进行登录，看有没有下一个flag或者在后天上传一句话getshell。<br>后来才发现网站的后台什么都没有，而且基本上没有发现可以很好地插一句话的地方。最后纠结了半天。才发现可以直接在数据库里直接写入一句句话，只要找到网站的绝对路径就可以了。而绝对路径在最初的<em>phpinfo()</em>页面就可以找到。</p>
+<p>于是写入一句话：<br><img src="http://ourd90bac.bkt.clouddn.com/sql.png" alt=""></p>
+<p>连上菜刀，getshell。并在网站根目录处拿到第五个<em>flag</em>。<br><img src="http://ourd90bac.bkt.clouddn.com/flag5-3.png" alt=""></p>
+<hr>
+<h2 id="服务器提权"><a href="#服务器提权" class="headerlink" title="服务器提权"></a>服务器提权</h2><p>既然拿到shell了，接下来就是常规的上大马提权服务器了。</p>
+<blockquote>
+<p>提权的思路一般有两种：1.利用服务器上高权限（主要指system权限）的服务进行提权；2.利用服务器的exp进行提权。</p>
+</blockquote>
+<p>一开始我想利用较为普遍的mysql数据库提权方式。但在试了udf、mof、nc反弹提权后均没有用，所得的用户都是users权限。最后只有看了下系统的补丁情况：</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/system.png" alt=""></p>
+<p>看来这下就可以利用大把的exp进行利用了。百度找到服务器没有打补丁的漏洞exp。利用成功。获取system权限，并创建属于administrator权限的用户，登录成功。</p>
+<p>在管理员的文件夹中找到最后两个flag，其中一个加密。应该是要管理员密码。使用pwdump7找到密码的hash，解出hash。</p>
+<p>打完收工。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 渗透 </tag>
+            
+            <tag> CTF </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>
