@@ -19,12 +19,12 @@
 如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTF中的php弱类型">
-<meta property="og:url" content="http://yoursite.com/2017/10/10/CTF中的php弱类型/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/10/10/PHP弱类型在CTF中的应用/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
 <meta property="og:description" content="PHP弱类型在CTF中的应用
 如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/php.jpg">
-<meta property="og:updated_time" content="2017-10-12T04:17:00.265Z">
+<meta property="og:updated_time" content="2017-10-12T04:20:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF中的php弱类型">
 <meta name="twitter:description" content="PHP弱类型在CTF中的应用
@@ -276,10 +276,10 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-CTF中的php弱类型" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-PHP弱类型在CTF中的应用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/10/CTF中的php弱类型/" class="article-date">
+      <a href="/2017/10/10/PHP弱类型在CTF中的应用/" class="article-date">
       <time datetime="2017-10-10T10:31:25.000Z" itemprop="datePublished">2017-10-10</time>
 </a>
 
@@ -343,60 +343,13 @@ var_dump( $a &lt;&gt; 0);
 var_dump( $a != 0);
 var_dump( $a != 1);
 ?&gt;
-</code></pre><p>输出如下：<br><img src="http://ourd90bac.bkt.clouddn.com/php.jpg" alt=""></p>
+</code></pre><p>输出如下：<br>  <img src="http://ourd90bac.bkt.clouddn.com/php.jpg" alt=""></p>
 <p>可见当<code>$a == &quot;0&quot;</code>输出正确，而<code>$a === &quot;0&quot;</code>却是错误的。这是为什么呢？原因就在于php中“==”与“===”的区别。前者是一种模糊等于，只会比较内容的值，不会比较内容的类型，也就是后面提到了松散比较。而后者是一种严格的等于判断，会将内容与内容类型都进行判断。这是php作为弱类型语言的一种特点。</p>
 <p>接下来将用一道CTF题来了解下实际情况中常见的php弱类型。</p>
 <h2 id="php源码分析"><a href="#php源码分析" class="headerlink" title="php源码分析"></a>php源码分析</h2><blockquote>
-<p>整型与字符串的纠葛</p>
+<p>整型与字符串的纠葛<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> </div><div class="line">show_source(<span class="keyword">__FILE__</span>); </div><div class="line">$a=<span class="number">0</span>; </div><div class="line">$b=<span class="number">0</span>; </div><div class="line">$c=<span class="number">0</span>; </div><div class="line">$d=<span class="number">0</span>; </div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'x1'</span>])) </div><div class="line">&#123; </div><div class="line">        $x1 = $_GET[<span class="string">'x1'</span>]; </div><div class="line">        $x1==<span class="string">"1"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">switch</span> ($x1) </div><div class="line">        &#123; </div><div class="line">        <span class="keyword">case</span> <span class="number">0</span>: </div><div class="line">        <span class="keyword">case</span> <span class="number">1</span>: </div><div class="line">                $a=<span class="number">1</span>; </div><div class="line">                <span class="keyword">break</span>; </div><div class="line">        &#125; </div><div class="line">&#125; </div><div class="line">$x2=(<span class="keyword">array</span>)json_decode(@$_GET[<span class="string">'x2'</span>]); </div><div class="line"><span class="keyword">if</span>(is_array($x2))&#123; </div><div class="line">    is_numeric(@$x2[<span class="string">"x21"</span>])?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">    <span class="keyword">if</span>(@$x2[<span class="string">"x21"</span>])&#123; </div><div class="line">        ($x2[<span class="string">"x21"</span>]&gt;<span class="number">2017</span>)?$b=<span class="number">1</span>:<span class="keyword">NULL</span>; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">if</span>(is_array(@$x2[<span class="string">"x22"</span>]))&#123; </div><div class="line">        <span class="keyword">if</span>(count($x2[<span class="string">"x22"</span>])!==<span class="number">2</span> <span class="keyword">OR</span> !is_array($x2[<span class="string">"x22"</span>][<span class="number">0</span>])) <span class="keyword">die</span>(<span class="string">"ha?"</span>); </div><div class="line">        $p = array_search(<span class="string">"XIPU"</span>, $x2[<span class="string">"x22"</span>]); </div><div class="line">        $p===<span class="keyword">false</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">foreach</span>($x2[<span class="string">"x22"</span>] <span class="keyword">as</span> $key=&gt;$val)&#123; </div><div class="line">            $val===<span class="string">"XIPU"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        &#125; </div><div class="line">        $c=<span class="number">1</span>; </div><div class="line">&#125; </div><div class="line">&#125; </div><div class="line">$x3 = $_GET[<span class="string">'x3'</span>]; </div><div class="line"><span class="keyword">if</span> ($x3 != <span class="string">'15562'</span>) &#123; </div><div class="line">    <span class="keyword">if</span> (strstr($x3, <span class="string">'XIPU'</span>)) &#123; </div><div class="line">        <span class="keyword">if</span> (substr(md5($x3),<span class="number">8</span>,<span class="number">16</span>) == substr(md5(<span class="string">'15562'</span>),<span class="number">8</span>,<span class="number">16</span>)) &#123; </div><div class="line">            $d=<span class="number">1</span>; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"><span class="keyword">if</span>($a &amp;&amp; $b &amp;&amp; $c &amp;&amp; $d)&#123; </div><div class="line">    <span class="keyword">include</span> <span class="string">"flag.php"</span>; </div><div class="line">    <span class="keyword">echo</span> $flag; </div><div class="line">&#125; </div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
 </blockquote>
-<pre><code>&lt;?php 
-show_source(__FILE__); 
-$a=0; 
-$b=0; 
-$c=0; 
-$d=0; 
-if (isset($_GET[&apos;x1&apos;])) 
-{ 
-        $x1 = $_GET[&apos;x1&apos;]; 
-        $x1==&quot;1&quot;?die(&quot;ha?&quot;):NULL; 
-        switch ($x1) 
-        { 
-        case 0: 
-        case 1: 
-                $a=1; 
-                break; 
-        } 
-} 
-$x2=(array)json_decode(@$_GET[&apos;x2&apos;]); 
-if(is_array($x2)){ 
-    is_numeric(@$x2[&quot;x21&quot;])?die(&quot;ha?&quot;):NULL; 
-    if(@$x2[&quot;x21&quot;]){ 
-        ($x2[&quot;x21&quot;]&gt;2017)?$b=1:NULL; 
-    } 
-    if(is_array(@$x2[&quot;x22&quot;])){ 
-        if(count($x2[&quot;x22&quot;])!==2 OR !is_array($x2[&quot;x22&quot;][0])) die(&quot;ha?&quot;); 
-        $p = array_search(&quot;XIPU&quot;, $x2[&quot;x22&quot;]); 
-        $p===false?die(&quot;ha?&quot;):NULL; 
-        foreach($x2[&quot;x22&quot;] as $key=&gt;$val){ 
-            $val===&quot;XIPU&quot;?die(&quot;ha?&quot;):NULL; 
-        } 
-        $c=1; 
-} 
-} 
-$x3 = $_GET[&apos;x3&apos;]; 
-if ($x3 != &apos;15562&apos;) { 
-    if (strstr($x3, &apos;XIPU&apos;)) { 
-        if (substr(md5($x3),8,16) == substr(md5(&apos;15562&apos;),8,16)) { 
-            $d=1; 
-        } 
-    } 
-} 
-if($a &amp;&amp; $b &amp;&amp; $c &amp;&amp; $d){ 
-    include &quot;flag.php&quot;; 
-    echo $flag; 
-} 
-?&gt;
-</code></pre><p>首先通读全部代码，这里得到flag的条件是变量<code>$a、$b、$c、$d</code>的值都要等于1。</p>
+<p>首先通读全部代码，这里得到flag的条件是变量<code>$a、$b、$c、$d</code>的值都要等于1。</p>
 <h3 id="分步解题"><a href="#分步解题" class="headerlink" title="分步解题"></a>分步解题</h3><ol>
 <li><code>$a = 1</code></li>
 </ol>
@@ -414,37 +367,13 @@ if($a &amp;&amp; $b &amp;&amp; $c &amp;&amp; $d){
 <blockquote>
 <p>数组与字符串的纠葛</p>
 </blockquote>
-<p>看以下源码：</p>
-<pre><code>if(!strcmp($c[1],$d) &amp;&amp; $c[1]!==$d){
-    echo &quot;You in,You win&quot;;
-}
-else{
-    echo &quot;Get out!&quot;;
-}
-</code></pre><p>源码中使用<code>strcmp</code>函数对变量<code>$c</code>与<code>$d</code>进行比较，其特点是将两个变量转换为ascii码后进行前者减后者，并返回一个int类型的相减后的结果。这样我们不难发现，<code>strcmp</code>在比较数字类型与字符串类型时，返回的数据都是正常的，但是一旦遇到其中数组类型的比较呢？答案是NULL<br>所以我们这里构造数组与其比较就会构造成恒为真，从而绕过判断，进入if中。</p>
+<p>看以下源码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">   <span class="keyword">if</span>(!strcmp($c[<span class="number">1</span>],$d) &amp;&amp; $c[<span class="number">1</span>]!==$d)&#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"You in,You win"</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span>&#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"Get out!"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>源码中使用<code>strcmp</code>函数对变量<code>$c</code>与<code>$d</code>进行比较，其特点是将两个变量转换为ascii码后进行前者减后者，并返回一个int类型的相减后的结果。这样我们不难发现，<code>strcmp</code>在比较数字类型与字符串类型时，返回的数据都是正常的，但是一旦遇到其中数组类型的比较呢？答案是NULL<br>所以我们这里构造数组与其比较就会构造成恒为真，从而绕过判断，进入if中。</p>
 <p><strong>补充</strong>：php中数组转换成其他类型的后的值：</p>
 <p>Array转换整型int/浮点型float会返回元素个数；<br>转换bool返回Array中是否有元素；转换成string返回’Array’，并抛出warning。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面这个例子可以看出php弱类型的成因在其对数据类型的处理上，体现在存在双等松散比较的条件判断与函数判断中。</p>
-<p>其实php对字符串的自动转化相当于使用<code>intval()</code>函数对字符串进行强制转换，只要存在字符串与数字类型的双等松散比较中就存在这种强制转换。造成这种现象的原因就在于php内核中对弱类型的封装，其存在于<code>zval</code>结构中：<br>    typedef struct _zval_struct zval;  </p>
-<pre><code>struct _zval_struct {  
-/* Variable information */  
-zvalue_value value;     /* value */  
-zend_uint refcount__gc;  
-zend_uchar type;    /* active type */  
-zend_uchar is_ref__gc;  
-};  
-
-typedef union _zvalue_value {  
-long lval;  /* long value */  
-double dval;    /* double value */  
-struct {  
-        char *val;  
-        int len;  
-    } str;  
-HashTable *ht;  /* hash table value */  
-zend_object_value obj;  
-} zvalue_value;
-</code></pre>
+<p>其实php对字符串的自动转化相当于使用<code>intval()</code>函数对字符串进行强制转换，只要存在字符串与数字类型的双等松散比较中就存在这种强制转换。造成这种现象的原因就在于php内核中对弱类型的封装，其存在于<code>zval</code>结构中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> _zval_struct zval;</div><div class="line">	<span class="keyword">struct</span> _zval_struct &#123;  </div><div class="line">    <span class="comment">/* Variable information */</span>  </div><div class="line">    zvalue_value value;     <span class="comment">/* value */</span>  </div><div class="line">    zend_uint refcount__gc;  </div><div class="line">    zend_uchar type;    <span class="comment">/* active type */</span>  </div><div class="line">    zend_uchar is_ref__gc;  </div><div class="line">	&#125;;  </div><div class="line"></div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">union</span> _zvalue_value &#123;  </div><div class="line">    <span class="keyword">long</span> lval;  <span class="comment">/* long value */</span>  </div><div class="line">    <span class="keyword">double</span> dval;    <span class="comment">/* double value */</span>  </div><div class="line">    <span class="keyword">struct</span> &#123;  </div><div class="line">        	<span class="keyword">char</span> *val;  </div><div class="line">        	<span class="keyword">int</span> len;  </div><div class="line">    	&#125; str;  </div><div class="line">    HashTable *ht;  <span class="comment">/* hash table value */</span>  </div><div class="line">    zend_object_value obj;  </div><div class="line">	&#125; zvalue_value;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -452,13 +381,13 @@ zend_object_value obj;
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/10/CTF中的php弱类型/">CTF中的php弱类型</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/10/PHP弱类型在CTF中的应用/">CTF中的php弱类型</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
         <p><span>发布时间:</span>2017-10-10, 18:31:25</p>
-        <p><span>最后更新:</span>2017-10-12, 12:17:00</p>
+        <p><span>最后更新:</span>2017-10-12, 12:20:00</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/10/CTF中的php弱类型/" title="CTF中的php弱类型">http://yoursite.com/2017/10/10/CTF中的php弱类型/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/10/CTF中的php弱类型/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/10/PHP弱类型在CTF中的应用/" title="CTF中的php弱类型">http://yoursite.com/2017/10/10/PHP弱类型在CTF中的应用/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/10/PHP弱类型在CTF中的应用/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -470,10 +399,16 @@ zend_object_value obj;
 
     <nav id="article-nav">
         
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/10/CTF中的php弱类型/">
+                    CTF中的php弱类型
+                </a>
+            </div>
+        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/10/PHP弱类型在CTF中的应用/">
-                    CTF中的php弱类型
+                <a href="/2017/10/06/mysql/">
+                    MySql 注入杂记
                 </a>
             </div>
         
@@ -541,13 +476,15 @@ zend_object_value obj;
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/2017/10/10/CTF中的php弱类型/" title="上一篇: CTF中的php弱类型">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/10/PHP弱类型在CTF中的应用/" title="下一篇: CTF中的php弱类型">
+            <a href="/2017/10/06/mysql/" title="下一篇: MySql 注入杂记">
                 <i class="fa fa-angle-right"></i>
             </a>
         
