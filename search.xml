@@ -5,7 +5,8 @@
     <entry>
       <title><![CDATA[CTF中的php弱类型]]></title>
       <url>/2017/10/10/PHP%E5%BC%B1%E7%B1%BB%E5%9E%8B%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/</url>
-      <content type="html"><![CDATA[<h1 id="PHP弱类型在CTF中的应用"><a href="#PHP弱类型在CTF中的应用" class="headerlink" title="PHP弱类型在CTF中的应用"></a>PHP弱类型在CTF中的应用</h1><blockquote>
+      <content type="html"><![CDATA[<h1 id="PHP弱类型在CTF中的应用"><a href="#PHP弱类型在CTF中的应用" class="headerlink" title="PHP弱类型在CTF中的应用"></a>PHP弱类型在CTF中的应用</h1><p><img src="http://ourd90bac.bkt.clouddn.com/14.jpg" alt=""></p>
+<blockquote>
 <p>如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。</p>
 </blockquote>
 <a id="more"></a>
@@ -67,9 +68,9 @@ var_dump( $a != 1);
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
             <tag> php </tag>
             
@@ -136,9 +137,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
@@ -217,9 +218,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
