@@ -32,7 +32,7 @@ var_dump( $a &lt;&gt; 0);
 var_dump( $a != 0);
 var_dump( $a != 1);
 ?&gt;
-</code></pre><p>输出如下：<br><img src="http://123" alt=""></p>
+</code></pre><p>输出如下：<br><img src="http://ourd90bac.bkt.clouddn.com/php.jpg" alt=""></p>
 <p>可见当<code>$a == &quot;0&quot;</code>输出正确，而<code>$a === &quot;0&quot;</code>却是错误的。这是为什么呢？原因就在于php中“==”与“===”的区别。前者是一种模糊等于，只会比较内容的值，不会比较内容的类型，也就是后面提到了松散比较。而后者是一种严格的等于判断，会将内容与内容类型都进行判断。这是php作为弱类型语言的一种特点。</p>
 <p>接下来将用一道CTF题来了解下实际情况中常见的php弱类型。</p>
 <h2 id="php源码分析"><a href="#php源码分析" class="headerlink" title="php源码分析"></a>php源码分析</h2><blockquote>

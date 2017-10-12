@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="C1em0's Blog">
 <meta property="og:description" content="PHP弱类型在CTF中的应用
 如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。">
-<meta property="og:image" content="http://123">
-<meta property="og:updated_time" content="2017-10-12T04:11:42.140Z">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/php.jpg">
+<meta property="og:updated_time" content="2017-10-12T04:17:00.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF中的php弱类型">
 <meta name="twitter:description" content="PHP弱类型在CTF中的应用
 如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。">
-<meta name="twitter:image" content="http://123">
+<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/php.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -343,7 +343,7 @@ var_dump( $a &lt;&gt; 0);
 var_dump( $a != 0);
 var_dump( $a != 1);
 ?&gt;
-</code></pre><p>输出如下：<br><img src="http://123" alt=""></p>
+</code></pre><p>输出如下：<br><img src="http://ourd90bac.bkt.clouddn.com/php.jpg" alt=""></p>
 <p>可见当<code>$a == &quot;0&quot;</code>输出正确，而<code>$a === &quot;0&quot;</code>却是错误的。这是为什么呢？原因就在于php中“==”与“===”的区别。前者是一种模糊等于，只会比较内容的值，不会比较内容的类型，也就是后面提到了松散比较。而后者是一种严格的等于判断，会将内容与内容类型都进行判断。这是php作为弱类型语言的一种特点。</p>
 <p>接下来将用一道CTF题来了解下实际情况中常见的php弱类型。</p>
 <h2 id="php源码分析"><a href="#php源码分析" class="headerlink" title="php源码分析"></a>php源码分析</h2><blockquote>
@@ -455,7 +455,7 @@ zend_object_value obj;
         <p><span>本文标题:</span><a href="/2017/10/10/CTF中的php弱类型/">CTF中的php弱类型</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
         <p><span>发布时间:</span>2017-10-10, 18:31:25</p>
-        <p><span>最后更新:</span>2017-10-12, 12:11:42</p>
+        <p><span>最后更新:</span>2017-10-12, 12:17:00</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/10/10/CTF中的php弱类型/" title="CTF中的php弱类型">http://yoursite.com/2017/10/10/CTF中的php弱类型/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/10/CTF中的php弱类型/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
