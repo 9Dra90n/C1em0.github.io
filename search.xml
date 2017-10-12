@@ -40,17 +40,17 @@ var_dump( $a != 1);
 <p>整型与字符串的纠葛<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> </div><div class="line">show_source(<span class="keyword">__FILE__</span>); </div><div class="line">$a=<span class="number">0</span>; </div><div class="line">$b=<span class="number">0</span>; </div><div class="line">$c=<span class="number">0</span>; </div><div class="line">$d=<span class="number">0</span>; </div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'x1'</span>])) </div><div class="line">&#123; </div><div class="line">        $x1 = $_GET[<span class="string">'x1'</span>]; </div><div class="line">        $x1==<span class="string">"1"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">switch</span> ($x1) </div><div class="line">        &#123; </div><div class="line">        <span class="keyword">case</span> <span class="number">0</span>: </div><div class="line">        <span class="keyword">case</span> <span class="number">1</span>: </div><div class="line">                $a=<span class="number">1</span>; </div><div class="line">                <span class="keyword">break</span>; </div><div class="line">        &#125; </div><div class="line">&#125; </div><div class="line">$x2=(<span class="keyword">array</span>)json_decode(@$_GET[<span class="string">'x2'</span>]); </div><div class="line"><span class="keyword">if</span>(is_array($x2))&#123; </div><div class="line">    is_numeric(@$x2[<span class="string">"x21"</span>])?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">    <span class="keyword">if</span>(@$x2[<span class="string">"x21"</span>])&#123; </div><div class="line">        ($x2[<span class="string">"x21"</span>]&gt;<span class="number">2017</span>)?$b=<span class="number">1</span>:<span class="keyword">NULL</span>; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">if</span>(is_array(@$x2[<span class="string">"x22"</span>]))&#123; </div><div class="line">        <span class="keyword">if</span>(count($x2[<span class="string">"x22"</span>])!==<span class="number">2</span> <span class="keyword">OR</span> !is_array($x2[<span class="string">"x22"</span>][<span class="number">0</span>])) <span class="keyword">die</span>(<span class="string">"ha?"</span>); </div><div class="line">        $p = array_search(<span class="string">"XIPU"</span>, $x2[<span class="string">"x22"</span>]); </div><div class="line">        $p===<span class="keyword">false</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">foreach</span>($x2[<span class="string">"x22"</span>] <span class="keyword">as</span> $key=&gt;$val)&#123; </div><div class="line">            $val===<span class="string">"XIPU"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        &#125; </div><div class="line">        $c=<span class="number">1</span>; </div><div class="line">&#125; </div><div class="line">&#125; </div><div class="line">$x3 = $_GET[<span class="string">'x3'</span>]; </div><div class="line"><span class="keyword">if</span> ($x3 != <span class="string">'15562'</span>) &#123; </div><div class="line">    <span class="keyword">if</span> (strstr($x3, <span class="string">'XIPU'</span>)) &#123; </div><div class="line">        <span class="keyword">if</span> (substr(md5($x3),<span class="number">8</span>,<span class="number">16</span>) == substr(md5(<span class="string">'15562'</span>),<span class="number">8</span>,<span class="number">16</span>)) &#123; </div><div class="line">            $d=<span class="number">1</span>; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"><span class="keyword">if</span>($a &amp;&amp; $b &amp;&amp; $c &amp;&amp; $d)&#123; </div><div class="line">    <span class="keyword">include</span> <span class="string">"flag.php"</span>; </div><div class="line">    <span class="keyword">echo</span> $flag; </div><div class="line">&#125; </div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
 </blockquote>
 <p>首先通读全部代码，这里得到flag的条件是变量<code>$a、$b、$c、$d</code>的值都要等于1。</p>
-<h3 id="分步解题"><a href="#分步解题" class="headerlink" title="分步解题"></a>分步解题</h3><ol>
+<h3 id="分步解题"><a href="#分步解题" class="headerlink" title="分步解题"></a>分步解题</h3><ul>
 <li><code>$a = 1</code></li>
-</ol>
+</ul>
 <p>要使变量等于1，要经过两层比较。首先在<code>$x1 == 1</code>的松散比较中要不等于”1”，这个很好过，任意不为1的值都可以。然后将<code>NULL</code>赋给<code>$x1</code>。接着进行了一次<code>switch</code>语句的比较。按照官方文档的说法,Switch中为确保精度，建议只使用比较整型和字符串。但由于php弱语言的缘故，所以也可以使用任意类型进行比较。那么这里我们<code>$x1</code>为<code>NULL</code>值就会和整型0进行一次松散的双等比较，于是为<code>true</code>。最终<code>$a = 1</code>。</p>
-<ol>
+<ul>
 <li><code>$b = 1</code>与<code>$c = 1</code></li>
-</ol>
+</ul>
 <p>源代码程序继续往下读，首先<code>json_decode</code>将传入的<code>$x2</code>数据进行json格式编码，说明我们需要传入一个数组，用的是json格式。接着<code>is_numeric</code>和与整型2017的判断是php弱类型题中的典型判断。由前面提到的整型与字符串型的比较知识中我们不难构造”2018a”这样的形式来绕过这里的判断使<code>$b = 1</code>。接着使用<code>array_search</code>函数对<code>$x2[&quot;x22&quot;]</code>进行匹配。但是同样的，在php函数中<code>array_search</code>函数进行的匹配也是通过松散的双等比较进行的，这里如果数组里有一个0值，字符串”XIPU”就会通过双等自动转换为0，从而匹配成功。综上，所以我们这里构造payload为<code>x2={&quot;x21&quot;:&quot;2018a&quot;;&quot;x22&quot;:[[1],0]}</code>就可以成功绕过了。</p>
-<ol>
+<ul>
 <li><code>$c = 1</code></li>
-</ol>
+</ul>
 <p>这里运用的是php中0e弱类型比较，只要是0e开头的字符串在双等的松散判断下都是相等的，这里涉及md5加密，直接截取它的代码，修改下成小脚本跑一下就出来了。</p>
 <p>全部的payload为：<code>?x1=a1&amp;x2={&quot;x21&quot;:&quot;2018a&quot;,&quot;x22&quot;:[[1],0]}&amp;x3=XIPU18570</code></p>
 <p><strong>小结</strong>：以上的弱类型转换中是整型与字符串类型的转换。</p>
@@ -68,9 +68,9 @@ var_dump( $a != 1);
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
             <tag> php </tag>
             
@@ -137,9 +137,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
@@ -218,9 +218,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
