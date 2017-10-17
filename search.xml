@@ -68,9 +68,9 @@ var_dump( $a != 1);
         
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> 渗透 </tag>
+            
+            <tag> CTF </tag>
             
             <tag> php </tag>
             
@@ -159,9 +159,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> 渗透 </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
         
@@ -240,9 +240,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> 渗透 </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
         
