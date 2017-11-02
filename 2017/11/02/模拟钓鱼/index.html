@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/ok.jpg">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/789456.jpg">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/sucess.jpg">
-<meta property="og:updated_time" content="2017-11-02T03:18:50.973Z">
+<meta property="og:updated_time" content="2017-11-02T03:20:30.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次杀软绕过（二）">
 <meta name="twitter:description" content="模拟钓鱼攻击引发的思考
@@ -332,6 +332,7 @@
         <h1 id="模拟钓鱼攻击引发的思考"><a href="#模拟钓鱼攻击引发的思考" class="headerlink" title="模拟钓鱼攻击引发的思考"></a>模拟钓鱼攻击引发的思考</h1><p><img src="http://ourd90bac.bkt.clouddn.com/fish.jpg" alt=""></p>
 <p>###1. 前言</p>
 <p>在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故事进行。</p>
+<a id="more"></a>
 <h3 id="2-背景介绍"><a href="#2-背景介绍" class="headerlink" title="2. 背景介绍"></a>2. 背景介绍</h3><p><strong>从cmd到powershell</strong><br>学计算机的都应该听说过DOS。dos与cmd很简单又很容易搞混的两个东西。通俗的来讲，dos本来就是一个操作系统，而cmd就只是个应用程序，它是dos的一个实现而已。cmd能实现的命令dos也可以，但是dos能实现的未必在cmd上能实现。作为一直专注于GUI操作系统开发的微软来说，cmd显得并不是那么重要。但是在服务器中一种好的shell是一个能提升管理人员效率的好东西。举例来讲，如果我们要在win系列计算机中创建一个账户，只需要点击鼠标，然后输入账户就可以轻松花费五分钟创建一个新账户，但是要是创建更多的账户，或者更多复杂的操作。系统管理员所要花费的时间就会更长，人性化的GUI操作系统，遇到了瓶颈。尽管微软尝试着用VBScript来配合着弥补这样的缺陷，但是仍旧不能完美地解决这个问题。在这样的背景下，powershell应运而生。关于powershell我就不多赘言，但你要理解它其实为一门脚本语言。</p>
 <h3 id="3-杀软与非PE文件"><a href="#3-杀软与非PE文件" class="headerlink" title="3. 杀软与非PE文件"></a>3. 杀软与非PE文件</h3><h4 id="3-1-什么是非PE文件？"><a href="#3-1-什么是非PE文件？" class="headerlink" title="3.1 什么是非PE文件？"></a>3.1 什么是非PE文件？</h4><p>有非PE文件，肯定是有PE文件。什么是PE（Portable Executable）呢？PE文件是一种windows系统 下的可执行文件，具体的文件类型有<code>exe</code>、<code>dll</code>、<code>ocx</code>、<code>sys</code>、<code>com</code>，这些都属于传统的PE文件。win系统可以直接或者间接执行。<br>现在看看非PE文件，其主要分三大类：</p>
 <ol>
@@ -358,7 +359,7 @@
         <p><span>本文标题:</span><a href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
         <p><span>发布时间:</span>2017-11-02, 11:16:11</p>
-        <p><span>最后更新:</span>2017-11-02, 11:18:50</p>
+        <p><span>最后更新:</span>2017-11-02, 11:20:30</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/11/02/模拟钓鱼/" title="一次杀软绕过（二）">http://yoursite.com/2017/11/02/模拟钓鱼/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/11/02/模拟钓鱼/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>

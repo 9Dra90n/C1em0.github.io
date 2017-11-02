@@ -8,6 +8,7 @@
       <content type="html"><![CDATA[<h1 id="模拟钓鱼攻击引发的思考"><a href="#模拟钓鱼攻击引发的思考" class="headerlink" title="模拟钓鱼攻击引发的思考"></a>模拟钓鱼攻击引发的思考</h1><p><img src="http://ourd90bac.bkt.clouddn.com/fish.jpg" alt=""></p>
 <p>###1. 前言</p>
 <p>在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故事进行。</p>
+<a id="more"></a>
 <h3 id="2-背景介绍"><a href="#2-背景介绍" class="headerlink" title="2. 背景介绍"></a>2. 背景介绍</h3><p><strong>从cmd到powershell</strong><br>学计算机的都应该听说过DOS。dos与cmd很简单又很容易搞混的两个东西。通俗的来讲，dos本来就是一个操作系统，而cmd就只是个应用程序，它是dos的一个实现而已。cmd能实现的命令dos也可以，但是dos能实现的未必在cmd上能实现。作为一直专注于GUI操作系统开发的微软来说，cmd显得并不是那么重要。但是在服务器中一种好的shell是一个能提升管理人员效率的好东西。举例来讲，如果我们要在win系列计算机中创建一个账户，只需要点击鼠标，然后输入账户就可以轻松花费五分钟创建一个新账户，但是要是创建更多的账户，或者更多复杂的操作。系统管理员所要花费的时间就会更长，人性化的GUI操作系统，遇到了瓶颈。尽管微软尝试着用VBScript来配合着弥补这样的缺陷，但是仍旧不能完美地解决这个问题。在这样的背景下，powershell应运而生。关于powershell我就不多赘言，但你要理解它其实为一门脚本语言。</p>
 <h3 id="3-杀软与非PE文件"><a href="#3-杀软与非PE文件" class="headerlink" title="3. 杀软与非PE文件"></a>3. 杀软与非PE文件</h3><h4 id="3-1-什么是非PE文件？"><a href="#3-1-什么是非PE文件？" class="headerlink" title="3.1 什么是非PE文件？"></a>3.1 什么是非PE文件？</h4><p>有非PE文件，肯定是有PE文件。什么是PE（Portable Executable）呢？PE文件是一种windows系统 下的可执行文件，具体的文件类型有<code>exe</code>、<code>dll</code>、<code>ocx</code>、<code>sys</code>、<code>com</code>，这些都属于传统的PE文件。win系统可以直接或者间接执行。<br>现在看看非PE文件，其主要分三大类：</p>
 <ol>
@@ -121,14 +122,14 @@
 <p>##1. 基础引入</p>
 </blockquote>
 <h3 id="1-1什么是XML？"><a href="#1-1什么是XML？" class="headerlink" title="1.1什么是XML？"></a>1.1什么是XML？</h3><p>XML是一种可扩展标记语言（英语：Extensible Markup Language，简称：XML），是一种标记语言。标记指计算机所能理解的信息符号，通过此种标记，计算机之间可以处理包含各种信息的文章等。如何定义这些标记，既可以选择国际通用的标记语言，比如HTML。被设计用来传输和存储数据。</p>
-<h3 id="1-2基础语法"><a href="#1-2基础语法" class="headerlink" title="1.2基础语法"></a>1.2基础语法</h3><p>和HTML一样作为一种标记语言，XML也具有传统标记语言的特色。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>C1em0<span class="tag">&lt;/<span class="name">to</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>XML-inject<span class="tag">&lt;/<span class="name">from</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="1-2基础语法"><a href="#1-2基础语法" class="headerlink" title="1.2基础语法"></a>1.2基础语法</h3><p>和HTML一样作为一种标记语言，XML也具有传统标记语言的特色。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>C1em0<span class="tag">&lt;/<span class="name">to</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>XML-inject<span class="tag">&lt;/<span class="name">from</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>上面的代码中可以看到出，xml语言有着我们熟悉的标签。在第一行是xml的版本和编码。在XML文档中，所有的元素都必须正确的嵌套，形成树形结构。并且整个XML文档中必须要有一个根元素。如上代码，<note>是整个文档的根元素。嵌套在note标签中的<to>和<from>则是根的子元素。</from></to></note></p>
 <p>同时，所有的XML元素都必须有关闭标签，这点不像html语法那样松散。如果缺失关闭标签，则会导致XML解析失败。</p>
 <h3 id="1-3XML实体"><a href="#1-3XML实体" class="headerlink" title="1.3XML实体"></a>1.3XML实体</h3><p>实体作为XML中五种简单模块中的一种，    因其用于定义与引用普通文本或者特殊字符，且实体可在内部和外部声明，所以利用其引用的特点就可以构造payload进行攻击。</p>
 <h2 id="2-文档定义类型DTD"><a href="#2-文档定义类型DTD" class="headerlink" title="2.文档定义类型DTD"></a>2.文档定义类型DTD</h2><p>DTD的作用是定义XML文档的合法构建模块。利用DTD来内部或外部引入实体。</p>
 <p>它的基本格式为：<code>&lt;!DOCTYPE 根元素名 [元素的描述]&gt;</code></p>
 <h3 id="2-1内部引入"><a href="#2-1内部引入" class="headerlink" title="2.1内部引入"></a>2.1内部引入</h3><p>首先确定格式：&lt;!ENTITY 实体名称 “实体的值”&gt;</p>
-<p>现在我们将DTD与XML放在同一个文档中，即构成了实体的内部引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;  </div><div class="line"><span class="meta">&lt;!DOCTYPE xxe [  </span></div><div class="line">    &lt;!ENTITY  C1em0  "This is an internally introduced entity"&gt;    </div><div class="line">]&gt;  </div><div class="line"><span class="tag">&lt;<span class="name">xxe</span>&gt;</span>  </div><div class="line">    &amp;C1em0;</div><div class="line"><span class="tag">&lt;/<span class="name">xxe</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>现在我们将DTD与XML放在同一个文档中，即构成了实体的内部引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span>  </div><div class="line"><span class="meta">&lt;!DOCTYPE xxe [  </span></div><div class="line">    &lt;!ENTITY  C1em0  "This is an internally introduced entity"&gt;    </div><div class="line">]&gt;  </div><div class="line"><span class="tag">&lt;<span class="name">xxe</span>&gt;</span>  </div><div class="line">    &amp;C1em0;</div><div class="line"><span class="tag">&lt;/<span class="name">xxe</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>直接访问该文档，&amp;C1em0就会被解析为“This is an internally introduced entity”并输出。</p>
 <h3 id="2-2外部引入"><a href="#2-2外部引入" class="headerlink" title="2.2外部引入"></a>2.2外部引入</h3><p>格式：<code>&lt;!ENTITY 实体名称 SYSTEM &quot;URI&quot;&gt;</code></p>
 <p>其与内部引入只是多了<code>system</code>与目标的<code>uri</code>，也就是目录。讲到这里应该可以知道xml实体注入攻击的主要目的是进行对目标的目录内容读取，目录遍历。其实也可以利用外部引入进行SSRF攻击。</p>
@@ -232,9 +233,9 @@ var_dump( $a != 1);
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
             <tag> php </tag>
             
@@ -323,9 +324,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
@@ -404,9 +405,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
