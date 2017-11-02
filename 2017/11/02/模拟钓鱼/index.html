@@ -14,16 +14,33 @@
 <meta name="author" content="C1em0" />
 
 
-    
-    
 
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="C1em0's Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="模拟钓鱼攻击引发的思考
+###1. 前言
+在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次杀软绕过（二）">
+<meta property="og:url" content="http://yoursite.com/2017/11/02/模拟钓鱼/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
+<meta property="og:description" content="模拟钓鱼攻击引发的思考
+###1. 前言
+在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/fish.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/2.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/3.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/4.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/bat-1.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/bat2.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/ok.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/789456.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/sucess.jpg">
+<meta property="og:updated_time" content="2017-11-02T03:18:50.973Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C1em0's Blog">
+<meta name="twitter:title" content="一次杀软绕过（二）">
+<meta name="twitter:description" content="模拟钓鱼攻击引发的思考
+###1. 前言
+在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故">
+<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/fish.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -51,13 +68,11 @@
 <link rel="stylesheet" href="/css/style.css">
 
 
-    <style> .article { opacity: 0;} </style>
-
 
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>C1em0&#39;s Blog</title>
+<title>一次杀软绕过（二） | C1em0&#39;s Blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -66,8 +81,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: true,
-        isHome: true,
-        isPost: false,
+        isHome: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -274,9 +289,7 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-模拟钓鱼" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-模拟钓鱼" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/11/02/模拟钓鱼/" class="article-date">
@@ -294,12 +307,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a>
+    <h1 class="article-title" itemprop="name">
+      一次杀软绕过（二）
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杀软/">杀软</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/病毒/">病毒</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络钓鱼/">网络钓鱼</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -327,358 +351,85 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杀软/">杀软</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/病毒/">病毒</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络钓鱼/">网络钓鱼</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-一次杀软绕过" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/02/一次杀软绕过/" class="article-date">
-      <time datetime="2017-11-02T03:08:35.000Z" itemprop="datePublished">2017-11-02</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/02/一次杀软绕过/">一次杀软绕过（一）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="Powershell-Empire-绕过AV实现远控"><a href="#Powershell-Empire-绕过AV实现远控" class="headerlink" title="Powershell Empire 绕过AV实现远控"></a>Powershell Empire 绕过AV实现远控</h1><p><img src="http://ourd90bac.bkt.clouddn.com/powershell.jpg" alt=""></p>
-<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>谁都喜欢框架。无论对于是平时出于各种目的游走在网页和服务器中的黑客，还是从事网络安全测试的安全人员来说，一个好的漏洞框架发挥的作用不言而喻。这其中的<code>Metasploit</code>脱颖而出。虽然这款框架集成了从漏洞发现到漏洞利用的几乎所有功能，但是不得不承认其在木马后门的免杀方面现如今已经不足以应付一些流氓杀软了。但是，<code>Powershell Empire</code>可以。本篇文章是笔者在一次偶然的机会中接触到<code>powershell empire</code>后进行简单初步的摸索，由于关于这款工具的文章很少，大部分都没有涉及到里面模块作用和原理，官方文档能提供的信息也不多。所以我也是尽力把自己理解的写出来，笔者能力有限，更深层次的利用和原理剖析还在逐步进行。请谅解。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杀软/">杀软</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/病毒/">病毒</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络钓鱼/">网络钓鱼</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/02/一次杀软绕过/#more">阅读全文 >></a>
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
+        <p><span>发布时间:</span>2017-11-02, 11:16:11</p>
+        <p><span>最后更新:</span>2017-11-02, 11:18:50</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/02/模拟钓鱼/" title="一次杀软绕过（二）">http://yoursite.com/2017/11/02/模拟钓鱼/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/11/02/模拟钓鱼/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-XML实体注入" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/19/XML实体注入/" class="article-date">
-      <time datetime="2017-10-19T05:04:36.000Z" itemprop="datePublished">2017-10-19</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/19/XML实体注入/">XML实体注入</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="XML实体注入"><a href="#XML实体注入" class="headerlink" title="XML实体注入"></a>XML实体注入</h1><p><img src="http://ourd90bac.bkt.clouddn.com/XML.jpg" alt=""></p>
-<blockquote>
-<p>感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XML/">XML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/注入/">注入</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码读取/">源码读取</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/19/XML实体注入/#more">阅读全文 >></a>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
         </p>
-      
-      <div class="clearfix"></div>
     </div>
-    
-  </div>
-  
-</article>
 
 
 
-
-
-
-
-
-
-  
-    <article id="post-PHP弱类型在CTF中的应用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/10/PHP弱类型在CTF中的应用/" class="article-date">
-      <time datetime="2017-10-10T10:31:25.000Z" itemprop="datePublished">2017-10-10</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+    <nav id="article-nav">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/10/PHP弱类型在CTF中的应用/">CTF中的php弱类型</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="PHP弱类型在CTF中的应用"><a href="#PHP弱类型在CTF中的应用" class="headerlink" title="PHP弱类型在CTF中的应用"></a>PHP弱类型在CTF中的应用</h1><p><img src="http://ourd90bac.bkt.clouddn.com/14.jpg" alt=""></p>
-<blockquote>
-<p>如果你经常接触到CTF比赛，那么你一定对php代码审计的题不会陌生。本篇文章将由CTF比赛引申对php弱类型进行一些总结。</p>
-</blockquote>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/10/PHP弱类型在CTF中的应用/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL注入杂记" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/MySQL注入杂记/" class="article-date">
-      <time datetime="2017-10-06T03:44:20.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/MySQL注入杂记/">MySql 注入杂记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="MySQL注入杂记"><a href="#MySQL注入杂记" class="headerlink" title="MySQL注入杂记"></a>MySQL注入杂记</h1><p><img src="http://ourd90bac.bkt.clouddn.com/mysql.jpg" alt=""></p>
-<h2 id="1-基础知识准备："><a href="#1-基础知识准备：" class="headerlink" title="1.基础知识准备："></a>1.基础知识准备：</h2><h3 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h3><ul>
-<li>基于从服务器的响应：<br>1.基于错误的sql注入；<br>2.联合查询的类型；<br>3.SQL盲注：<pre><code>基于布尔的盲注
-基于时间的盲注
-基于报错的盲注
-</code></pre>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/06/MySQL注入杂记/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Blackb0x-服务器渗透" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/16/Blackb0x-服务器渗透/" class="article-date">
-      <time datetime="2017-08-16T08:15:40.000Z" itemprop="datePublished">2017-08-16</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/02/一次杀软绕过/">
+                    一次杀软绕过（一）
+                </a>
+            </div>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a>
-    </h1>
-  
+    </nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="一次虚拟机服务器的内网渗透"><a href="#一次虚拟机服务器的内网渗透" class="headerlink" title="一次虚拟机服务器的内网渗透"></a>一次虚拟机服务器的内网渗透</h1><p><img src="http://ourd90bac.bkt.clouddn.com/timg.jpg" alt=""></p>
-<blockquote>
-<p>D0g3第三次测试的题目，整个题目拥有7个<em>flag</em>。目标主机是一个Windows2003虚拟机，登录密码非弱口令，无法通过字典爆破的形式进行简单的进入，需进行常规的内网渗透程序进行渗透。</p>
-</blockquote>
-<hr>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渗透/">渗透</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/16/Blackb0x-服务器渗透/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模拟钓鱼攻击引发的思考"><span class="toc-number">1.</span> <span class="toc-text">模拟钓鱼攻击引发的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-背景介绍"><span class="toc-number">1.0.1.</span> <span class="toc-text">2. 背景介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-杀软与非PE文件"><span class="toc-number">1.0.2.</span> <span class="toc-text">3. 杀软与非PE文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-什么是非PE文件？"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">3.1 什么是非PE文件？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-杀软与非PE文件"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">3.3 杀软与非PE文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-一点点小建议"><span class="toc-number">1.0.3.</span> <span class="toc-text">4. 一点点小建议</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"一次杀软绕过（二）　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
 
 
 
@@ -686,9 +437,33 @@
 
 
 
+    
 
-  
-  
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/02/一次杀软绕过/" title="下一篇: 一次杀软绕过（一）">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/一次杀软绕过/">一次杀软绕过（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/XML实体注入/">XML实体注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/PHP弱类型在CTF中的应用/">CTF中的php弱类型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/MySQL注入杂记/">MySql 注入杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">

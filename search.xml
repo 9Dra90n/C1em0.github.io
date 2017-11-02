@@ -3,6 +3,116 @@
   
     
     <entry>
+      <title><![CDATA[一次杀软绕过（二）]]></title>
+      <url>/2017/11/02/%E6%A8%A1%E6%8B%9F%E9%92%93%E9%B1%BC/</url>
+      <content type="html"><![CDATA[<h1 id="模拟钓鱼攻击引发的思考"><a href="#模拟钓鱼攻击引发的思考" class="headerlink" title="模拟钓鱼攻击引发的思考"></a>模拟钓鱼攻击引发的思考</h1><p><img src="http://ourd90bac.bkt.clouddn.com/fish.jpg" alt=""></p>
+<p>###1. 前言</p>
+<p>在上一篇文章“Powershell Empire绕过AV实现远控”中介绍了以powershell作为攻击平台的empire利用前些天曝光的office无宏命令漏洞进行钓鱼攻击，绕过杀软对目标靶机进行远控的例子。事后在继续对实验中恶意代码绕过方式进行进一步思考时有了一点新的理解，接下来将在文章中写明。此篇文章依旧围绕着powershell与杀软的猫捉老鼠的故事进行。</p>
+<h3 id="2-背景介绍"><a href="#2-背景介绍" class="headerlink" title="2. 背景介绍"></a>2. 背景介绍</h3><p><strong>从cmd到powershell</strong><br>学计算机的都应该听说过DOS。dos与cmd很简单又很容易搞混的两个东西。通俗的来讲，dos本来就是一个操作系统，而cmd就只是个应用程序，它是dos的一个实现而已。cmd能实现的命令dos也可以，但是dos能实现的未必在cmd上能实现。作为一直专注于GUI操作系统开发的微软来说，cmd显得并不是那么重要。但是在服务器中一种好的shell是一个能提升管理人员效率的好东西。举例来讲，如果我们要在win系列计算机中创建一个账户，只需要点击鼠标，然后输入账户就可以轻松花费五分钟创建一个新账户，但是要是创建更多的账户，或者更多复杂的操作。系统管理员所要花费的时间就会更长，人性化的GUI操作系统，遇到了瓶颈。尽管微软尝试着用VBScript来配合着弥补这样的缺陷，但是仍旧不能完美地解决这个问题。在这样的背景下，powershell应运而生。关于powershell我就不多赘言，但你要理解它其实为一门脚本语言。</p>
+<h3 id="3-杀软与非PE文件"><a href="#3-杀软与非PE文件" class="headerlink" title="3. 杀软与非PE文件"></a>3. 杀软与非PE文件</h3><h4 id="3-1-什么是非PE文件？"><a href="#3-1-什么是非PE文件？" class="headerlink" title="3.1 什么是非PE文件？"></a>3.1 什么是非PE文件？</h4><p>有非PE文件，肯定是有PE文件。什么是PE（Portable Executable）呢？PE文件是一种windows系统 下的可执行文件，具体的文件类型有<code>exe</code>、<code>dll</code>、<code>ocx</code>、<code>sys</code>、<code>com</code>，这些都属于传统的PE文件。win系统可以直接或者间接执行。<br>现在看看非PE文件，其主要分三大类：</p>
+<ol>
+<li>脚本类。其有包括系统自带和非系统自带。系统自带包括bat、vbs、jscript以及后来加入的powershell。非系统自带包括我们熟知的python、php、java。</li>
+<li>文档类。包括我们熟知的office三剑客，word,excel,ppt和另外一个pdf。这四个使我们使用率极高的文档。</li>
+<li>其他。包括swf,lnk等类型的文件。</li>
+</ol>
+<p>####3.2  杀软的查杀策略<br>上述的PE文件在我们平时的使用率最高的文件，自然杀软在进行恶意文件的查杀方面重点就在PE文件上。上一篇文章中我已经介绍过用exe格式的木马进行测试，杀软不负众望，一个不漏的地对其进行了木马隔离。我们可能听过可以dll注入进行反弹shell,但是作为PE文件，dll恶意文件的效果如何呢？这里我们试验下。<br>和往常一样，生成一个恶意的payload1.dll文件。然后放入有杀软的主机。然后在写一个payload1.bat的文件，内容如下：<br><img src="http://ourd90bac.bkt.clouddn.com/2.jpg" alt=""><br>此文件的目的就是让系统调用rundll.exe这个程序执行我们的恶意payload1.dll文件，从而达到反弹shell的目的。但是如何让受害者在毫无戒心的情况下执行bat文件呢？我这里使用了rar可生成<em>自解压</em>压缩包的功能，并且将bat文件设为自动执行，这样就可以让受害者在点击压缩包的一瞬间执行我们的恶意dll文件<br><img src="http://ourd90bac.bkt.clouddn.com/3.jpg" alt=""><br>最后生成自解压压缩包。如图：<br><img src="http://ourd90bac.bkt.clouddn.com/4.jpg" alt=""></p>
+<p>我本以为这样就可以巧妙地绕过杀软和用户，但是并不是。这个压缩包在生成后不久就被杀软查杀。这种方法显然不行，也证明杀软在PE文件内容上的检测已经是很强并且可靠的。那么对于非PE文件呢？</p>
+<h4 id="3-3-杀软与非PE文件"><a href="#3-3-杀软与非PE文件" class="headerlink" title="3.3 杀软与非PE文件"></a>3.3 杀软与非PE文件</h4><p>一样的，我们先生成一个含有恶意powershell代码的bat文件试一试。<br><img src="http://ourd90bac.bkt.clouddn.com/bat-1.jpg" alt=""><br>以文本方式打开，我们可以看到base64编码的恶意代码，然后将其拖入目标机。这时杀软报毒了<br><img src="http://ourd90bac.bkt.clouddn.com/bat2.jpg" alt=""></p>
+<p>看来对于非PE文件的内容检测也是很严格的。</p>
+<p>但是我们再来回顾下无宏office命令执行漏洞的恶意代码，也许我们有新的发现<br><img src="http://ourd90bac.bkt.clouddn.com/ok.jpg" alt=""></p>
+<p>在我看来，这段恶意利用代码其实可以拆分成两个区域：一是office的DDE协议漏洞的区域，它的主要功能是从word直接调用cmd.exe。二是后面的powershell正常的命令区，这个区域属于psl的正常语法，是psl解释器要解释的东西。而我们真正的恶意代码却在世界的另一端—-网站上。所以其能绕过杀软的检测，成功反弹shell。那既然这样，我们是不是可以举一反三？</p>
+<p>于是，我们将psl区的代码写入一个bat文件中，然后直接双击执行。注意，这个bat文件并没有耳音代码，只有恶意的链接。你猜结果会怎样？<br><img src="http://ourd90bac.bkt.clouddn.com/789456.jpg" alt=""><br><img src="http://ourd90bac.bkt.clouddn.com/sucess.jpg" alt=""><br>成功侦听，最后故技重施。</p>
+<h3 id="4-一点点小建议"><a href="#4-一点点小建议" class="headerlink" title="4. 一点点小建议"></a>4. 一点点小建议</h3><p>通过实验可以看出，我们的杀软已经很强悍了，对于恶意代码基本上都可以识别出来，但是对于这种恶意钓鱼链接依旧不敏感。如果以后杀软可以对于钓鱼链接能够很好识别，那就更棒了。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 杀软 </tag>
+            
+            <tag> 病毒 </tag>
+            
+            <tag> powershell </tag>
+            
+            <tag> 网络钓鱼 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[一次杀软绕过（一）]]></title>
+      <url>/2017/11/02/%E4%B8%80%E6%AC%A1%E6%9D%80%E8%BD%AF%E7%BB%95%E8%BF%87/</url>
+      <content type="html"><![CDATA[<h1 id="Powershell-Empire-绕过AV实现远控"><a href="#Powershell-Empire-绕过AV实现远控" class="headerlink" title="Powershell Empire 绕过AV实现远控"></a>Powershell Empire 绕过AV实现远控</h1><p><img src="http://ourd90bac.bkt.clouddn.com/powershell.jpg" alt=""></p>
+<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>谁都喜欢框架。无论对于是平时出于各种目的游走在网页和服务器中的黑客，还是从事网络安全测试的安全人员来说，一个好的漏洞框架发挥的作用不言而喻。这其中的<code>Metasploit</code>脱颖而出。虽然这款框架集成了从漏洞发现到漏洞利用的几乎所有功能，但是不得不承认其在木马后门的免杀方面现如今已经不足以应付一些流氓杀软了。但是，<code>Powershell Empire</code>可以。本篇文章是笔者在一次偶然的机会中接触到<code>powershell empire</code>后进行简单初步的摸索，由于关于这款工具的文章很少，大部分都没有涉及到里面模块作用和原理，官方文档能提供的信息也不多。所以我也是尽力把自己理解的写出来，笔者能力有限，更深层次的利用和原理剖析还在逐步进行。请谅解。</p>
+<a id="more"></a>
+<h2 id="2-为什么是Powershell"><a href="#2-为什么是Powershell" class="headerlink" title="2. 为什么是Powershell?"></a>2. 为什么是Powershell?</h2><p><code>empire</code>选择了<code>poweeshell</code>作为攻击平台总是有原因的。其作为windows平台下的一种命令行外壳程序和脚本环境，它可以使命令行用户和脚本编写者利用<code>.NET Farmework</code>。<br>说到这里，你可能还是一脸懵逼，我也是，毕竟这只是<code>powershell</code>的官方解释。那我们来看下empire开发者是怎么讲的：<a href="http://www.exploit-monday.com/2012/08/Why-I-Choose-PowerShell.html" target="_blank" rel="external">传送门</a>。其中重要的一段是：”<code>Scripting languages offer an advantage to an attacker because they provide a layer of abstraction that AV has no idea how to interpret. For example, a common AV bypass technique is to package malicious Python scripts into an executable. AV has a hard time distinguishing the resulting binary as malicious or legitimate because the Python interpreter itself has plenty of legitimate uses. PowerShell offers a distinct advantage in this scenario due to its tight integration with the Windows OS and considering it’s based upon the .NET framework. With such a powerful scripting environment, there is no need to drop files on disk. Everything, with the possible exception of the script itself run entirely memory-resident.</code>“</p>
+<blockquote>
+<p>大致意思是：脚本语言为攻击者提供了一个优势，因为它们提供了一个抽象层，杀软（AV）不知道如何解释。例如，常见的杀软旁路技术是将恶意Python脚本打包成可执行文件。杀软很难将生成的二进制文件区分为恶意的或合法的，因为Python解释器本身有很多合法用途。PowerShell在这种情况下提供了明显的优势，因为它与Windows操作系统的紧密集成，并考虑到它基于.NET框架。使用如此强大的脚本环境，不需要将文件放在磁盘上。所有的东西，除了脚本本身的可能例外，它完全是内存驻留的。</p>
+</blockquote>
+<p><code>no need to drop files on disk</code>:无需写入硬盘，内存驻留。<code>empire</code>使攻击者能在内存中运行命令，也就是empire使用powershell作为攻击平台，并且有<strong>大概率</strong>成功绕过AV的原因。</p>
+<blockquote>
+<p>这种内存中运行的命令是否会让后来的入侵取证出现困难？这个我还未咨询相关的大佬和老师，暂时就不得而知了。</p>
+</blockquote>
+<p>##3.  初识Empire<br>和<code>Metasploit</code>一样，<code>empire</code>集成了对主机控制提权，内网主机探测等主流的渗透测试功能。</p>
+<p>其重要的由四大部分：<code>listeners</code>（侦听器）、<code>stagers</code>（驿站）、<code>agents</code>（会话代理）、<code>modules</code>（模块）</p>
+<ul>
+<li><code>listeners</code>相当于msf中的监听模块，用来设置本地IP进行会话监听的。</li>
+<li><code>stargers</code>就是一段恶意代码，它通过本机的会话代理（agent）实现本机与被攻击主机的会话通道。</li>
+<li><code>agents</code>相当于msf中的<code>session</code>，当我们在被攻击主机上成功执行恶意代码（即木马后门） 时，会反弹一个shell，并通过agent构建本地和被害主机会话。</li>
+<li><code>modules</code>这是一个我们在控制了目标主机后，对目标内网或域进行渗透所要使用的主要模块，其包含了很多功能，具体的笔者还在摸索中。</li>
+</ul>
+<p>###3.1  配置侦听器（Listener）<br>使用<code>listeners</code>命令，加载当前活动的侦听器。没有的话也会提示你。你可以输入<code>help</code>查看帮助，选择Listeners下可以使用的命令。这里我们首先创建一个活动的侦听器。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(Empire: listeners) &gt; uselistener</div></pre></td></tr></table></figure></p>
+<p><code>TAB</code>键弹出可用的侦听建立途径<br><img src="http://ourd90bac.bkt.clouddn.com/begin.jpg" alt=""><br>从图中可以看出具体有七种侦听途径建立方式，其中有五种是通过<code>http</code>协议进行建立通信的，他们之间具体的差别主要在于目标主机的第三方软件配置的差别，关于这一点，<code>empire</code>的官方文档给出了解释：<a href="http://www.powershellempire.com/?page_id=102" target="_blank" rel="external">传送门</a>。剩下的是我们熟悉的msf中常用的<code>meterpreter</code>以及使用条件需要目标主机安装第三方软件<code>dropbox</code>的dbx途径。这里我们选择比较通用的<code>http</code>通道。使用info查看详细配置信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(Empire: listeners) &gt; uselistener http</div><div class="line">(Empire: listeners/http) &gt; info</div></pre></td></tr></table></figure>
+<p>然后进行配置：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(Empire: listeners/http) &gt; <span class="built_in">set</span> Host 192.168.1.144</div><div class="line">(Empire: listeners/http) &gt; <span class="built_in">set</span> Port 1234</div></pre></td></tr></table></figure></p>
+<p>然后execute生成侦听<br><img src="http://ourd90bac.bkt.clouddn.com/1.jpg" alt=""><br>然后main指令回到主菜单，可以看到一个侦听已经激活。listener列表显示详细信息。<br><img src="http://ourd90bac.bkt.clouddn.com/listen_ok.jpg" alt=""></p>
+<h3 id="3-1-配置Stagers"><a href="#3-1-配置Stagers" class="headerlink" title="3.1 配置Stagers"></a>3.1 配置Stagers</h3><p>配置好侦听后就要配置我们的攻击代码了，也就是木马后门。使用<code>usestager</code>命令<code>TAB</code>键可以看到所有根据不同系统的生成木马后门的文件类型。<br><img src="http://ourd90bac.bkt.clouddn.com/stager1.jpg" alt=""><br>其中<code>multi</code>为通用模块、<code>osx</code>mac操作系统、另外还有<code>linux</code>与<code>windows</code>模块。<br>生成的文件类型有<code>.dll</code>,<code>bat</code>，<code>vbs</code>等等。其中就包括前段时间office宏命令漏洞的主角<code>windos/macro</code>模块。详情点击：<a href="http://bobao.360.cn/learning/detail/3605.html" target="_blank" rel="external">传送门</a>。</p>
+<p>实战中直接命令<code>usestager [具体模块]</code>就可以在<code>/tmp</code>目录下生成一个特定文件格式的木马后门，然后通过webshell上传运行就可以了。这里因为演示需要就不进行具体文件生成，直接使用<code>launcher</code>+语言类型（这里是powershell）+侦听的名字（这里是侦听的默认名字是http，也可以在设置侦听时自己更改），如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(Empire) &gt; launcher powershell http</div></pre></td></tr></table></figure></p>
+<p>生成一个powershell语言的内容,直接在powershell目录下执行就行了:<br><img src="http://ourd90bac.bkt.clouddn.com/begin_poershell.jpg" alt=""></p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/ps3.jpg" alt=""><br>运行，发现杀软并没有有明显变化，但也并不能证明其免杀效果，因为不清楚杀软是否对powershell的行为流量进行监控。</p>
+<h4 id="3-1-1-由此衍生的骚操作"><a href="#3-1-1-由此衍生的骚操作" class="headerlink" title="3.1.1 由此衍生的骚操作"></a>3.1.1 由此衍生的骚操作</h4><p>从上面这里我们可以看到执行恶意的 powershell命令时杀软并没有给出任何报毒反映，那么我们在此基础上进一步将这个利用点扩大化，进行一次模拟网络钓鱼。如何实现？这里我们就要用到最近才出现的office<code>无宏命令执行漏洞</code>了。前几天国内已经有人翻译了原文：<a href="http://bobao.360.cn/learning/detail/4526.html" target="_blank" rel="external">传送门</a>。这个office漏洞的原理简单的说就是，在office中可以通过一种存在于windows内部程序进行数据动态交换的<code>DDE</code>协议进行命令执行，从而达到调用windows内其他程序的目的。看到这里，你应该有点想法了。没错，我们就是用这个命令执行的漏洞，执行我们前面的<code>powershell恶意命令</code>,看会不会有我们想要的那种效果。</p>
+<ol>
+<li>先将上面生成的攻击代码写成psl文本，放入本地lamp环境根目录：<br><img src="http://ourd90bac.bkt.clouddn.com/apache.jpg" alt=""></li>
+<li>编写钓鱼的word文档：<br><img src="http://ourd90bac.bkt.clouddn.com/ps.jpg" alt=""></li>
+<li>先用 杀软扫下有没有报毒，再发送至虚拟机。这里因为虚拟机的win7没有word，我就暂时以我的物理机来实验吧（拼了）<br>结果杀软未报毒<br>最终，反弹了自己物理机的shell…………..<br><img src="http://ourd90bac.bkt.clouddn.com/myself.jpg" alt=""></li>
+</ol>
+<p>再此过程中杀软除了powershell启动的一瞬间给了一次见惯不怪的警告（原来警告确实重要！），之后的会话一直没结束。成功验证操作。</p>
+<p>言归正传，此时，<code>empire</code>的agent已有反应，远控回话已开启。此时，我们使用命令<code>interact</code>进入已经建立的会话名。<br><img src="http://ourd90bac.bkt.clouddn.com/in_shell.jpg" alt=""><br>help查看我们在已建立的会话中所能使用的命令，查看目标主机信息。<br><img src="http://ourd90bac.bkt.clouddn.com/system%20info.jpg" alt=""></p>
+<p>能成功执行，继续深入，使用<code>mimikatz</code>命令可以查看目标主机的用户名以及密码，但是我么可以看到这里失败了。<br><img src="http://ourd90bac.bkt.clouddn.com/pass1.jpg" alt=""><br>爆出了<code>needs to elevated content</code>的错误，这里大家应该明白需要提权了。那么<code>empire</code>有没类似于msf中的提权命令呢？有的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(Empire PHWC8BT4) &gt;bypassuac [侦听名]</div></pre></td></tr></table></figure></p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/pass2.jpg" alt=""><br>就可以进行提权。</p>
+<blockquote>
+<p>但是如果运气不好也会出现提权不成功的情况。刚刚说过它和msf一样有相应的提权方式，<code>empire</code>中的<code>module</code>模块中含有相应的扫描模块可以在一键命令提权失败的情况下，进行扫描，找出对应的提权方法，这是后话了。虽然它和msf在提权上的成功率上的比较，笔者还没比较过，但应该是有差别的。</p>
+</blockquote>
+<p>list列出提权后的会话列表，发现多出一个和原来会话主机名相同，但<code>Username</code>前多一个星号的会话，这个带星号的用户就是提权后的高权限用户了。我们现在interact进入这个高权限用户的会话中，查看用户密码。<br><img src="http://ourd90bac.bkt.clouddn.com/password.jpg" alt=""></p>
+<p>可以看出，提权后我们可以对目标主机进行更多的操作，可以直接找出目标的用户名和密码的hash，如果用户密码是弱口令的话，甚至可以直接爆出密码明文。接着如果目标主机有其他内网主机的话就可以进一步地“为所欲为”了。</p>
+<blockquote>
+<p>在控制目标主机后，我们可以将这个会话发送给msf，使用<code>meterpreter</code>进行更多操作。</p>
+</blockquote>
+<h1 id="4-我们的杀软在做什么"><a href="#4-我们的杀软在做什么" class="headerlink" title="4. 我们的杀软在做什么"></a>4. 我们的杀软在做什么</h1><p>首先实验一开始，我们使用了恶意的powershell的命令进行攻击。杀软并没有进行报错，毫无反应，证明杀软暂时对Powershell的执行并没有多少设防，但此时我们的攻击端也未进入agent会话，因为不懂杀软是怎样基于行为进行查杀的，所以我们暂时不能说明它不可以拦截恶意行为。<br>而后，攻击端interact连接进会话，攻击机和目标靶机形成数据交互，而且是我们通过http通道建立的。我们再看看目标靶机，依旧毫无反应，这其实很奇怪了，现在的杀软既然已经开始对于电脑中的可以行为进行检测，特别是这种很有疑点的外部通讯，应该是重点查杀的对象，但这里杀软并没有给出任何反应。难道是因为我们的侦听模块是使用的http通道？大胆猜测下，应该是的。<br>接下来的操作目标靶机的杀软都没有反应。到了提权的那一步我就开始使用杀软进行主动扫描，按照杀软的描述，其对磁盘和内存进程都会扫描。但是结果提醒我是安全的。</p>
+<p>一片绿色，完全没有问题。就和我们前面的钓鱼一样，木马后门如入无人之境。<br>为了体现这种powershell马的特点和优势，我有生成了几个msf下典型的木马，其中包括未经过编码处理的木马，经过<code>encode</code>十多次的木马和加壳木马，无一例外被杀软查杀，只是后两种有概率在种入木马时运行前不会报毒，但是在运行时，无一例外均被杀。甚至加壳的马会直接被我物理机上的杀软查出。</p>
+<h1 id="5-最后"><a href="#5-最后" class="headerlink" title="5. 最后"></a>5. 最后</h1><p><code>empire</code>虽然已经比较强大了，但是使用工具的意义并不是它能给我们带来的效益和那种快感，其真正意义在于研究其背后所利用的漏洞原理。这里利用powershell进行攻击，并建立有效的攻击机与目标机的连接，最吸引人的是原始开发者的思路，这才是<code>empire</code>带给我最大的收获。顺着这个思路似乎已经有其他发现了。</p>
+<blockquote>
+<p>该文写于10月中旬，此漏洞利用过程杀软现已具备查杀功能。该文已同过360安全客平台发表,<a href="http://m.bobao.360.cn/learning/appdetail/4643.html" target="_blank" rel="external">http://m.bobao.360.cn/learning/appdetail/4643.html</a></p>
+</blockquote>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 杀软 </tag>
+            
+            <tag> 病毒 </tag>
+            
+            <tag> powershell </tag>
+            
+            <tag> 网络钓鱼 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[XML实体注入]]></title>
       <url>/2017/10/19/XML%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/</url>
       <content type="html"><![CDATA[<h1 id="XML实体注入"><a href="#XML实体注入" class="headerlink" title="XML实体注入"></a>XML实体注入</h1><p><img src="http://ourd90bac.bkt.clouddn.com/XML.jpg" alt=""></p>
