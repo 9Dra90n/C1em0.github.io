@@ -17,7 +17,7 @@
 
 <meta name="description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOBz注入">
+<meta property="og:title" content="OOB注入">
 <meta property="og:url" content="http://yoursite.com/2017/11/14/MySQL OOB注入/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
 <meta property="og:description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
@@ -25,9 +25,9 @@
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB5.jpg">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB3.jpg">
 <meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB.jpg">
-<meta property="og:updated_time" content="2017-11-14T05:57:00.045Z">
+<meta property="og:updated_time" content="2017-11-14T05:59:06.712Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOBz注入">
+<meta name="twitter:title" content="OOB注入">
 <meta name="twitter:description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
 <meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/OOB4.jpg">
 
@@ -61,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>OOBz注入 | C1em0&#39;s Blog</title>
+<title>OOB注入 | C1em0&#39;s Blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -295,7 +295,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      OOBz注入
+      OOB注入
     </h1>
   
 
@@ -339,12 +339,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/11/14/MySQL OOB注入/">OOBz注入</a></p>
+        <p><span>本文标题:</span><a href="/2017/11/14/MySQL OOB注入/">OOB注入</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
         <p><span>发布时间:</span>2017-11-14, 13:54:23</p>
-        <p><span>最后更新:</span>2017-11-14, 13:57:00</p>
+        <p><span>最后更新:</span>2017-11-14, 13:59:06</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/11/14/MySQL OOB注入/" title="OOBz注入">http://yoursite.com/2017/11/14/MySQL OOB注入/</a>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/14/MySQL OOB注入/" title="OOB注入">http://yoursite.com/2017/11/14/MySQL OOB注入/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/11/14/MySQL OOB注入/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -408,7 +408,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"OOBz注入　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"OOB注入　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -440,7 +440,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/14/MySQL OOB注入/">OOBz注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/13/密码学总结系列/">密码学总结系列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/一次杀软绕过/">一次杀软绕过（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/XML实体注入/">XML实体注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/PHP弱类型在CTF中的应用/">CTF中的php弱类型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/MySQL注入杂记/">MySql 注入杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/14/MySQL OOB注入/">OOB注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/13/密码学总结系列/">密码学总结系列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/模拟钓鱼/">一次杀软绕过（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/一次杀软绕过/">一次杀软绕过（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/XML实体注入/">XML实体注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/PHP弱类型在CTF中的应用/">CTF中的php弱类型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/MySQL注入杂记/">MySql 注入杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/16/Blackb0x-服务器渗透/">Blackb0x 服务器渗透</a></li></ul>
 
 
 
