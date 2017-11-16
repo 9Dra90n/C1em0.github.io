@@ -3,6 +3,40 @@
   
     
     <entry>
+      <title><![CDATA[Mysql利用innodb注入]]></title>
+      <url>/2017/11/16/Mysql%E5%88%A9%E7%94%A8innodb%E6%B3%A8%E5%85%A5/</url>
+      <content type="html"><![CDATA[<h1 id="Mysql注入新姿势—innodb存储引擎的利用"><a href="#Mysql注入新姿势—innodb存储引擎的利用" class="headerlink" title="Mysql注入新姿势—innodb存储引擎的利用"></a>Mysql注入新姿势—innodb存储引擎的利用</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于常见的mysql注入来说，我们常利用mysql中自带存储整个数据信息的<code>information_schema</code>数据库来注入查询数据。但是当我们遇到正则将其关键字，例如information禁掉后该如何注入呢？或许你有千万种敏感字符绕过姿势，但是今天我在逛国外网站时发现有人提到了<code>innodb</code>，所以我就测试了下，发现其可以在特定版本中替代<code>information_schema</code>库作为注入数据的突破口。</p>
+<a id="more"></a>
+<h2 id="Mysql-gt-5-6-x"><a href="#Mysql-gt-5-6-x" class="headerlink" title="Mysql&gt;5.6.x"></a>Mysql&gt;5.6.x</h2><p>在Mysql中，存储数据的默认引擎分为两类。一类是在5.5.x之前的<code>MyISAM</code>数据存储引擎，另一类是5.5.x版本后的<code>innodb</code>引擎。并且mysql开发团队在5.5.x版本后将<code>innodb</code>作为数据库的默认引擎。<br>而在mysql 5.6.x版本起，innodb增添了两个新表，一个是<code>innodb_index_stats</code>,另一个是<code>innodb_table_stats</code>。查阅官方文档，其对这两个新表的解释如下图：<br><img src="http://ourd90bac.bkt.clouddn.com/02.jpg" alt=""><br>从官方文档我们可以发现两个有用的信息：</p>
+<ol>
+<li>从5.6.x版本开始，<code>innodb_index_stats</code>和<code>innodb_table_stats</code>数据表时自动设置的。</li>
+<li>两个表都会存储数据库和对应的数据表。</li>
+</ol>
+<h2 id="本地实验"><a href="#本地实验" class="headerlink" title="本地实验"></a>本地实验</h2><p>那么我们来本地实验下，我是用mysql 5.7.2版本来实验</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> @@innodb_version;</div></pre></td></tr></table></figure>
+<p><img src="http://ourd90bac.bkt.clouddn.com/03.jpg" alt=""></p>
+<p>查看已有的数据库<br><img src="http://ourd90bac.bkt.clouddn.com/04.jpg" alt=""></p>
+<p>查看<code>innodb_table_stats</code>表中的数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> mysql.innodb_table_stats;</div></pre></td></tr></table></figure>
+<p><img src="http://ourd90bac.bkt.clouddn.com/06.jpg" alt=""><br>表中只有两个系统数据库和一个user数据库和对应表名，以及最后更新时间。这个结果很是让人疑惑，既然有数据，但是为什么数据不全，单单只出现了一个数据库。再次查阅官方文档，从文档的实例中发现这两个表其实是用于记录更改和新创建的数据库和表的信息，但准确的说是保存最近的数据库变动记录，但是具体会保留多久呢？官方文档是写的是<code>InnoDB Persistent Statistics Tables</code>（永久记录表）。观察表中显示user数据库是11月4号创建的，而笔者测试的时候是11月14号，中间相隔10天。那么这里我们再次创建一个<code>inno_test</code>的数据库。<br><img src="http://ourd90bac.bkt.clouddn.com/08.jpg" alt=""><br>发现也被记录了下来。于是我们就有了取代<code>information_schema</code>的注入payload</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> table_name <span class="keyword">from</span> mysql.innodb_table_stats <span class="keyword">where</span> database_name=<span class="keyword">schema</span>();</div></pre></td></tr></table></figure>
+<p><img src="http://ourd90bac.bkt.clouddn.com/09.jpg" alt=""><br>就能够成功注入。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 注入 </tag>
+            
+            <tag> Mysql </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[OOB注入]]></title>
       <url>/2017/11/14/MySQL%20OOB%E6%B3%A8%E5%85%A5/</url>
       <content type="html"><![CDATA[<h1 id="MYSQL-OOB-带外注入"><a href="#MYSQL-OOB-带外注入" class="headerlink" title="MYSQL OOB(带外注入)"></a>MYSQL OOB(带外注入)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章起于2017hctf中的一道注入题，第一次遇见但确实比较有意思，所以记录下来。<br>原题是一个简单的页面，提示网站的数据库还没有完成，但是页面显示是连接到sql server数据库的。通过目录扫描获得网站部分源码的zip文件。<br><a id="more"></a>源码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"><span class="built_in">echo</span> <span class="string">"Bob received a mission to write a login system on someone else's server, and he he only finished half of the work&lt;br /&gt;"</span>;</div><div class="line"><span class="built_in">echo</span> <span class="string">"flag is hctf&#123;what you get&#125;&lt;br /&gt;&lt;br /&gt;"</span>;</div><div class="line">error_reporting(E_ALL^E_NOTICE^E_WARNING);</div><div class="line"></div><div class="line">try &#123;</div><div class="line">   <span class="variable">$conn</span> = new PDO( <span class="string">"sqlsrv:Server=*****;Database=not_here"</span>,<span class="string">"oob"</span>, <span class="string">""</span>); </div><div class="line">&#125;</div><div class="line"></div><div class="line">catch( PDOException <span class="variable">$e</span> ) &#123;</div><div class="line">   die( <span class="string">"Error connecting to SQL Server"</span>.<span class="variable">$e</span>-&gt;getMessage() ); </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#echo "Connected to MySQL&lt;br /&gt;";</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Connected to SQL Server&lt;br /&gt;"</span>;</div><div class="line"></div><div class="line"><span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">'id'</span>];</div><div class="line"><span class="keyword">if</span>(preg_match(<span class="string">'/EXEC|xp_cmdshell|sp_configure|xp_reg(.*)|CREATE|DROP|declare|insert|into|outfile|dumpfile|sleep|wait|benchmark/i'</span>, <span class="variable">$id</span>)) &#123;</div><div class="line">	die(<span class="string">'NoNoNo'</span>);</div><div class="line">&#125;</div><div class="line"><span class="variable">$query</span> = <span class="string">"select message from not_here_too where id = <span class="variable">$id</span>"</span>; //link server: On  linkname:mysql</div><div class="line"></div><div class="line"><span class="variable">$stmt</span> = <span class="variable">$conn</span>-&gt;query( <span class="variable">$query</span> ); </div><div class="line"><span class="keyword">while</span> ( @<span class="variable">$row</span> = <span class="variable">$stmt</span>-&gt;fetch( PDO::FETCH_ASSOC ) )&#123;</div><div class="line">	//TO DO: ...</div><div class="line">	//It<span class="string">'s time to sleep...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
